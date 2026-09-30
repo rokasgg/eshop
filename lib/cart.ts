@@ -31,12 +31,16 @@ export function minOrderShortfall(subtotal: number, boxes: number): string | nul
 }
 
 // Lithuanian plural forms: 1 dėžutė, 2–9 dėžutės, 10–20 dėžučių, 21 dėžutė…
-export function boxesLabel(n: number) {
+export function boxesWord(n: number) {
   const mod10 = n % 10;
   const mod100 = n % 100;
-  if (mod10 === 1 && mod100 !== 11) return `${n} dėžutė`;
-  if (mod10 >= 2 && (mod100 < 10 || mod100 >= 20)) return `${n} dėžutės`;
-  return `${n} dėžučių`;
+  if (mod10 === 1 && mod100 !== 11) return "dėžutė";
+  if (mod10 >= 2 && (mod100 < 10 || mod100 >= 20)) return "dėžutės";
+  return "dėžučių";
+}
+
+export function boxesLabel(n: number) {
+  return `${n} ${boxesWord(n)}`;
 }
 
 export function formatEur(value: number) {

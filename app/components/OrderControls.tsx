@@ -10,16 +10,13 @@ export function useBoxesInCart(id: string) {
   return items.find((i) => i.id === id)?.boxQuantity ?? 0;
 }
 
-// Box selector + add/update CTA + current order state for one product.
-// The selector mirrors the cart line once the product is in the order, so
-// the card and the cart drawer can never show different quantities.
-export default function OrderControls({
-  line,
-  available = true,
-}: {
-  line: Omit<CartLine, "boxQuantity">;
-  available?: boolean;
-}) {
+// Shared ordering state for one product. The selector mirrors the cart line
+// once the product is in the order, so a card and the cart drawer can never
+// show different quantities.
+export function useBoxOrder(
+  line: Omit<CartLine, "boxQuantity">,
+  { available = true, idleLabel = "Pridėti" }: { available?: boolean; idleLabel?: string } = {}
+) {
   const { addBoxes, setBoxQuantity } = useCart();
   const inCart = useBoxesInCart(line.id);
   const isInOrder = inCart > 0;
@@ -50,22 +47,58 @@ export default function OrderControls({
         ? "Kiekis atnaujintas"
         : isInOrder
           ? "Atnaujinti kiekį"
-          : "Pridėti";
+          : idleLabel;
 
-  const orderedLine = { ...line, boxQuantity: inCart };
+  const icon = !available ? "block" : confirmation ? "check" : isInOrder ? "sync" : "add_shopping_cart";
+
+  return {
+    boxes,
+    setBoxes: (n: number) => setDraft(clampBoxes(n)),
+    submit,
+    inCart,
+    isInOrder,
+    unchanged,
+    confirmation,
+    available,
+    label,
+    icon,
+    submitDisabled: !available || (unchanged && !confirmation),
+    orderedLine: { ...line, boxQuantity: inCart },
+  };
+}
+
+export function OrderStatus({ order }: { order: ReturnType<typeof useBoxOrder> }) {
+  if (!order.isInOrder) return null;
+  return (
+    <p className="flex items-center gap-space-xs font-sans text-label-sm text-on-tertiary-fixed-variant" role="status">
+      <span className="material-symbols-outlined text-[16px]" aria-hidden="true">check_circle</span>
+      <span>
+        Jūsų užsakyme: {boxesLabel(order.inCart)} · {totalUnits(order.orderedLine)} vnt. ·{" "}
+        {formatEur(lineTotal(order.orderedLine))}
+      </span>
+    </p>
+  );
+}
+
+// Box selector + add/update CTA + current order state (compact layout).
+export default function OrderControls({
+  line,
+  available = true,
+}: {
+  line: Omit<CartLine, "boxQuantity">;
+  available?: boolean;
+}) {
+  const order = useBoxOrder(line, { available });
+  const { boxes, setBoxes, submit, unchanged, confirmation, label, icon, submitDisabled } = order;
 
   return (
     <div className="@container space-y-space-sm">
       <div className="flex flex-col gap-space-sm @[22rem]:flex-row">
-        <BoxStepper
-          value={boxes}
-          onChange={(n) => setDraft(clampBoxes(n))}
-          disabled={!available}
-        />
+        <BoxStepper value={boxes} onChange={setBoxes} disabled={!available} />
         <button
           type="button"
           onClick={submit}
-          disabled={!available || (unchanged && !confirmation)}
+          disabled={submitDisabled}
           aria-disabled={!available || unchanged}
           className={`flex min-h-11 flex-1 items-center justify-center gap-space-xs rounded-lg px-space-md font-sans text-label-lg uppercase tracking-wider transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-antique-gold-bright disabled:cursor-not-allowed ${!available
               ? "bg-surface-container-high text-on-surface-variant/60"
@@ -77,20 +110,13 @@ export default function OrderControls({
             }`}
         >
           <span className="material-symbols-outlined text-[18px]" aria-hidden="true">
-            {!available ? "block" : confirmation ? "check" : isInOrder ? "sync" : "add_shopping_cart"}
+            {icon}
           </span>
           <span>{label}</span>
         </button>
       </div>
 
-      {isInOrder && (
-        <p className="flex items-center gap-space-xs font-sans text-label-sm text-on-tertiary-fixed-variant" role="status">
-          <span className="material-symbols-outlined text-[16px]" aria-hidden="true">check_circle</span>
-          <span>
-            Jūsų užsakyme: {boxesLabel(inCart)} · {totalUnits(orderedLine)} vnt. · {formatEur(lineTotal(orderedLine))}
-          </span>
-        </p>
-      )}
+      <OrderStatus order={order} />
     </div>
   );
 }
