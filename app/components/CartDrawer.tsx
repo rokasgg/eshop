@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useCart } from "../context/CartContext";
+import BoxStepper from "./BoxStepper";
+import { boxesLabel, formatEur, lineTotal, minOrderShortfall, totalUnits } from "@/lib/cart";
 
 type FormData = {
   name: string;
@@ -20,8 +22,9 @@ const INPUT =
 const BLANK: FormData = { name: "", email: "", phone: "", address: "", notes: "" };
 
 export default function CartDrawer() {
-  const { items, removeItem, updateQty, clearCart, subtotal, isOpen, closeCart } =
+  const { items, removeItem, setBoxQuantity, clearCart, subtotal, totalBoxes, isOpen, closeCart } =
     useCart();
+  const shortfall = minOrderShortfall(subtotal, totalBoxes);
 
   const [step, setStep] = useState<Step>("cart");
   const [form, setForm] = useState<FormData>(BLANK);
@@ -79,10 +82,11 @@ export default function CartDrawer() {
           }`,
           items: items.map((i) => ({
             id: i.id,
-            name: i.name,
-            price: i.price,
-            quantity: i.quantity,
             sku: i.sku,
+            name: i.name,
+            boxQuantity: i.boxQuantity,
+            unitsPerBox: i.unitsPerBox,
+            pricePerBox: i.pricePerBox,
           })),
         }),
       });
@@ -123,7 +127,7 @@ export default function CartDrawer() {
         {/* ── Header ── */}
         <div className="flex items-center justify-between border-b border-outline-variant/30 px-space-lg py-space-md">
           <h2 className="font-sans text-title-md font-bold text-on-surface">
-            {step === "cart" && `Krepšelis${hasItems ? ` (${items.length})` : ""}`}
+            {step === "cart" && `Krepšelis${hasItems ? ` (${boxesLabel(totalBoxes)})` : ""}`}
             {step === "form" && "Pristatymo Duomenys"}
             {step === "success" && "Užsakymas Patvirtintas"}
           </h2>
@@ -157,30 +161,25 @@ export default function CartDrawer() {
                         <div className="absolute inset-0 bg-gradient-to-br from-surface-container-high to-primary-container" />
                       )}
                     </div>
-                    <div className="flex min-w-0 flex-1 flex-col">
-                      <p className="truncate font-sans text-body-md font-semibold text-on-surface">{item.name}</p>
-                      <p className="font-sans text-label-sm text-on-surface-variant/60">
-                        €{item.price.toFixed(2)} / vnt.
-                        {item.moq && item.moq > 1 ? ` · MOQ ${item.moq}` : ""}
+                    <div className="flex min-w-0 flex-1 flex-col gap-space-xs">
+                      <div className="flex items-start justify-between gap-space-sm">
+                        <p className="font-sans text-body-md font-semibold text-on-surface">{item.name}</p>
+                        <p className="shrink-0 font-sans text-body-md font-bold text-on-surface">
+                          {formatEur(lineTotal(item))}
+                        </p>
+                      </div>
+                      <p className="font-sans text-body-sm text-on-surface-variant">
+                        {boxesLabel(item.boxQuantity)} × {formatEur(item.pricePerBox)}
                       </p>
-                      <div className="mt-auto flex items-center gap-space-sm">
-                        <div className="flex items-center rounded-lg border border-outline-variant">
-                          <button
-                            onClick={() => updateQty(item.id, item.quantity - (item.moq || 1))}
-                            className="px-2.5 py-1 font-sans text-body-md text-on-surface-variant transition hover:text-on-surface"
-                          >
-                            −
-                          </button>
-                          <span className="min-w-[1.5rem] text-center font-sans text-body-md font-medium text-on-surface">
-                            {item.quantity}
-                          </span>
-                          <button
-                            onClick={() => updateQty(item.id, item.quantity + (item.moq || 1))}
-                            className="px-2.5 py-1 font-sans text-body-md text-on-surface-variant transition hover:text-on-surface"
-                          >
-                            +
-                          </button>
-                        </div>
+                      <p className="font-sans text-label-sm text-on-surface-variant/70">
+                        {item.unitsPerBox} vnt. dėžutėje · iš viso {totalUnits(item)} vnt.
+                      </p>
+                      <div className="mt-space-xs flex items-center gap-space-md">
+                        <BoxStepper
+                          value={item.boxQuantity}
+                          onChange={(n) => setBoxQuantity(item.id, n)}
+                          size="sm"
+                        />
                         <button
                           onClick={() => removeItem(item.id)}
                           className="font-sans text-label-sm text-on-surface-variant/60 transition hover:text-error"
@@ -189,9 +188,6 @@ export default function CartDrawer() {
                         </button>
                       </div>
                     </div>
-                    <p className="shrink-0 font-sans text-body-md font-bold text-on-surface">
-                      €{(item.price * item.quantity).toFixed(2)}
-                    </p>
                   </li>
                 ))}
               </ul>
@@ -236,9 +232,12 @@ export default function CartDrawer() {
                   {items.map((i) => (
                     <li key={i.id} className="flex justify-between text-on-surface-variant">
                       <span>
-                        {i.name} <span className="text-on-surface-variant/60">× {i.quantity}</span>
+                        {i.name}{" "}
+                        <span className="text-on-surface-variant/60">
+                          × {boxesLabel(i.boxQuantity)} ({totalUnits(i)} vnt.)
+                        </span>
                       </span>
-                      <span>€{(i.price * i.quantity).toFixed(2)}</span>
+                      <span className="shrink-0">{formatEur(lineTotal(i))}</span>
                     </li>
                   ))}
                 </ul>
@@ -286,9 +285,12 @@ export default function CartDrawer() {
               <div className="flex items-center justify-between">
                 <span className="font-sans text-body-md text-on-surface-variant">Tarpinė suma</span>
                 <span className="font-serif text-headline-sm font-bold text-on-surface">
-                  €{subtotal.toFixed(2)}
+                  {formatEur(subtotal)}
                 </span>
               </div>
+            )}
+            {step === "cart" && shortfall && (
+              <p className="font-sans text-body-sm text-on-surface-variant">{shortfall}</p>
             )}
             <div className="flex gap-space-sm">
               {step === "form" && (
@@ -304,7 +306,7 @@ export default function CartDrawer() {
                 type={step === "form" ? "submit" : "button"}
                 form={step === "form" ? "checkout-form" : undefined}
                 onClick={step === "cart" ? () => setStep("form") : undefined}
-                disabled={step === "form" && submitting}
+                disabled={step === "form" ? submitting : !!shortfall}
                 className="flex-1 rounded-lg bg-primary-container py-3 font-sans text-label-lg font-semibold uppercase tracking-wider text-parchment-deep transition hover:bg-racing-green-dark disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {step === "cart"

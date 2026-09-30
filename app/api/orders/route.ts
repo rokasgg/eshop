@@ -1,22 +1,19 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { supabaseAdmin } from "@/lib/supabase/server";
+import { lineTotal, totalUnits, type CartLine } from "@/lib/cart";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-type OrderItem = {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  sku?: string | null;
-};
+type OrderItem = Omit<CartLine, "imageUrl">;
 
 type OrderPayload = {
   clientName: string;
   clientContact: string;
   items: OrderItem[];
 };
+
+const isWholeBoxes = (n: unknown): n is number => Number.isInteger(n) && (n as number) >= 1;
 
 export async function POST(request: Request) {
   const body = (await request.json()) as OrderPayload;
@@ -25,14 +22,38 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Missing order details" }, { status: 400 });
   }
 
+  // Box-based lines only: whole boxes, one line per product.
+  const valid = body.items.every(
+    (i) =>
+      i?.id &&
+      isWholeBoxes(i.boxQuantity) &&
+      isWholeBoxes(i.unitsPerBox) &&
+      typeof i.pricePerBox === "number" &&
+      i.pricePerBox >= 0
+  );
+  if (!valid || new Set(body.items.map((i) => i.id)).size !== body.items.length) {
+    return NextResponse.json({ error: "Invalid order lines" }, { status: 400 });
+  }
+
+  const items = body.items.map((i) => ({
+    id: i.id,
+    sku: i.sku ?? null,
+    name: i.name,
+    boxQuantity: i.boxQuantity,
+    unitsPerBox: i.unitsPerBox,
+    pricePerBox: i.pricePerBox,
+    totalUnits: totalUnits(i),
+    lineTotal: lineTotal(i),
+  }));
+
   const orderId = crypto.randomUUID();
-  const total = body.items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  const total = items.reduce((sum, i) => sum + i.lineTotal, 0);
 
   const { error } = await supabaseAdmin.from("orders").insert({
     order_id: orderId,
     client_name: body.clientName,
     client_contact: body.clientContact,
-    items: body.items,
+    items,
     status: "pending",
   });
 
@@ -51,9 +72,10 @@ export async function POST(request: Request) {
         `Contact: ${body.clientContact}`,
         "",
         "Items:",
-        ...body.items.map(
+        ...items.map(
           (i) =>
-            `- ${i.name}${i.sku ? ` [SKU: ${i.sku}]` : ""} x${i.quantity} @ €${i.price.toFixed(2)} = €${(i.price * i.quantity).toFixed(2)}`
+            `- ${i.name}${i.sku ? ` [SKU: ${i.sku}]` : ""}: ${i.boxQuantity} box(es) × €${i.pricePerBox.toFixed(2)}` +
+            ` (${i.unitsPerBox} units/box, ${i.totalUnits} units) = €${i.lineTotal.toFixed(2)}`
         ),
         "",
         `Total: €${total.toFixed(2)}`,

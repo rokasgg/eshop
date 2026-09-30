@@ -90,7 +90,7 @@ export default function HotelsCatalogClient({ products }: { products: ShopProduc
               <p className="font-sans text-body-lg font-medium">Nė vienas produktas neatitinka filtrų.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-space-md sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-space-md sm:grid-cols-2 lg:grid-cols-3 lg:gap-gutter">
               {sorted.map((product, index) => (
                 <HotelProductCard key={product.id} product={product} priority={index < 3} />
               ))}

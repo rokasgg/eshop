@@ -3,7 +3,7 @@ import type { TeaCategory } from "../ShopClient";
 
 export type HotelSortKey = "default" | "price-asc" | "price-desc" | "cup-asc" | "caffeine";
 
-const CATEGORY_LABELS: Record<TeaCategory, string> = {
+export const CATEGORY_LABELS: Record<TeaCategory, string> = {
   black: "Juodoji",
   green: "Žalioji",
   herbal: "Žolelių & Vaisių",
@@ -37,7 +37,7 @@ export default function FilterBar({
   caffeineFilter: "all" | "high" | "none";
   onCaffeineChange: (v: "all" | "high" | "none") => void;
 }) {
-  const { totalItems, openCart } = useCart();
+  const { totalBoxes, openCart } = useCart();
 
   return (
     <section className="top-20 z-40 w-full bg-surface/95 px-margin-mobile py-space-md shadow-sm backdrop-blur-md lg:px-margin-desktop">
@@ -76,7 +76,7 @@ export default function FilterBar({
               <span className="material-symbols-outlined text-[18px] text-antique-gold-bright" aria-hidden="true">shopping_cart</span>
               <span className="font-sans text-label-lg">Užsakymas</span>
               <span className="flex h-5 w-5 items-center justify-center rounded-full bg-antique-gold-bright text-[11px] font-bold text-primary">
-                {totalItems}
+                {totalBoxes}
               </span>
             </button>
           </div>

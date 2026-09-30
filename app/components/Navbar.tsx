@@ -23,7 +23,7 @@ export default function Navbar() {
   const [activeLang, setActiveLang] = useState("LT");
   const langRef = useRef<HTMLDivElement>(null);
 
-  const { totalItems, openCart } = useCart();
+  const { totalBoxes, openCart } = useCart();
 
   // Longest matching href wins, so /shop/hotels doesn't also highlight /shop
   const pathname = usePathname();
@@ -126,14 +126,14 @@ export default function Navbar() {
           {/* Mano pasirinkimas (cart) */}
           <button
             onClick={openCart}
-            aria-label={`Mano pasirinkimas, ${totalItems} prekė(-ių)`}
+            aria-label={`Mano pasirinkimas, ${totalBoxes} dėž.`}
             className="flex items-center gap-space-xs rounded-lg bg-surface-container px-space-md py-space-sm text-on-surface transition-colors hover:bg-surface-container-high"
           >
             {/* <span className="font-sans text-label-lg font-semibold hidden sm:inline">Mano pasirinkimas</span> */}
             <span className="material-symbols-outlined text-[20px] sm:hidden" aria-hidden="true">shopping_bag</span>
-            {totalItems > 0 && (
+            {totalBoxes > 0 && (
               <span className="flex h-5 w-5 items-center justify-center rounded-full bg-secondary font-sans text-label-sm font-bold text-on-secondary">
-                {totalItems > 99 ? "99+" : totalItems}
+                {totalBoxes > 99 ? "99+" : totalBoxes}
               </span>
             )}
           </button>

@@ -3,7 +3,8 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useCart } from "../context/CartContext";
+import OrderControls from "../components/OrderControls";
+import { formatEur, type CartLine } from "@/lib/cart";
 
 export type TeaCategory = "black" | "green" | "herbal" | "white_oolong";
 export type OccasionTag = "breakfast" | "afternoon" | "rooms" | "spa";
@@ -25,6 +26,8 @@ export type ShopProduct = {
   occasion_tags?: OccasionTag[] | null;
   units_per_package?: number | null;
   package_weight_grams?: number | null;
+  // Not in the DB yet; only an explicit `false` marks a product out of stock.
+  in_stock?: boolean | null;
 };
 
 const TEA_TYPE_LABELS: Record<"loose" | "bags", string> = {
@@ -32,12 +35,20 @@ const TEA_TYPE_LABELS: Record<"loose" | "bags", string> = {
   bags: "Tea Bags",
 };
 
-export function piecePrice(product: ShopProduct) {
-  return product.price_wholesale + product.single_unit_fee;
-}
-
+// A box holds `moq` units; boxes are the only unit customers order in.
 export function boxPrice(product: ShopProduct) {
   return product.price_wholesale * product.moq;
+}
+
+export function toCartLine(product: ShopProduct): Omit<CartLine, "boxQuantity"> {
+  return {
+    id: product.id,
+    sku: product.sku,
+    name: product.name,
+    imageUrl: product.image_url,
+    unitsPerBox: product.moq,
+    pricePerBox: boxPrice(product),
+  };
 }
 
 // Standard loose-tea serving size, used only when a loose product has a known
@@ -60,8 +71,6 @@ type SortKey = "default" | "price-asc" | "price-desc" | "name";
 
 export default function ShopClient({ products }: { products: ShopProduct[] }) {
   const [sort, setSort] = useState<SortKey>("default");
-  const { items, addItem, updateQty } = useCart();
-  const [added, setAdded] = useState<string | null>(null);
 
   const [search, setSearch] = useState("");
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
@@ -129,37 +138,6 @@ export default function ShopClient({ products }: { products: ShopProduct[] }) {
         return list;
     }
   }, [filtered, sort]);
-
-  const handleAddBox = (product: ShopProduct) => {
-    addItem({
-      id: product.id,
-      name: `${product.name} (box)`,
-      price: product.price_wholesale,
-      imageUrl: product.image_url,
-      moq: product.moq,
-      sku: product.sku,
-    });
-    setAdded(product.id);
-    setTimeout(() => setAdded(null), 1500);
-  };
-
-  const pieceQty = (product: ShopProduct) =>
-    items.find((i) => i.id === `${product.id}-piece`)?.quantity ?? 0;
-
-  const incPiece = (product: ShopProduct) => {
-    addItem({
-      id: `${product.id}-piece`,
-      name: `${product.name} (1 vnt.)`,
-      price: piecePrice(product),
-      imageUrl: product.image_url,
-      moq: 1,
-      sku: product.sku,
-    });
-  };
-
-  const decPiece = (product: ShopProduct) => {
-    updateQty(`${product.id}-piece`, pieceQty(product) - 1);
-  };
 
   const filterPanel = (
     <div className="space-y-space-xl">
@@ -331,11 +309,6 @@ export default function ShopClient({ products }: { products: ShopProduct[] }) {
                 <ProductCard
                   key={product.id}
                   product={product}
-                  isAdded={added === product.id}
-                  onAddBox={() => handleAddBox(product)}
-                  pieceQty={pieceQty(product)}
-                  onIncPiece={() => incPiece(product)}
-                  onDecPiece={() => decPiece(product)}
                   priority={index < 4}
                 />
               ))}
@@ -349,21 +322,12 @@ export default function ShopClient({ products }: { products: ShopProduct[] }) {
 
 export function ProductCard({
   product,
-  isAdded,
-  onAddBox,
-  pieceQty,
-  onIncPiece,
-  onDecPiece,
   priority,
 }: {
   product: ShopProduct;
-  isAdded: boolean;
-  onAddBox: () => void;
-  pieceQty: number;
-  onIncPiece: () => void;
-  onDecPiece: () => void;
   priority?: boolean;
 }) {
+
   return (
     <div className="group flex flex-col overflow-hidden rounded-xl border border-outline-variant/40 bg-surface transition hover:shadow-md">
       {/* Image */}
@@ -392,59 +356,22 @@ export function ProductCard({
         <Link href={`/shop/${product.id}`} className="font-sans font-semibold text-on-surface hover:underline">
           {product.name}
         </Link>
-        <p className="mt-1.5 font-sans text-label-sm text-on-surface-variant/70">
-          {product.sku && <span>SKU: {product.sku} · </span>}
-          MOQ: {product.moq}
-        </p>
+        {product.sku && (
+          <p className="mt-1.5 font-sans text-label-sm text-on-surface-variant/70">SKU: {product.sku}</p>
+        )}
 
         <div className="mt-auto space-y-space-sm pt-space-md">
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="font-sans text-title-md font-bold text-on-surface">
-                €{boxPrice(product).toFixed(2)}
-              </span>
-              <span className="ml-1 font-sans text-label-sm text-on-surface-variant/60">
-                / dėž. ({product.moq} vnt. × €{product.price_wholesale.toFixed(2)})
-              </span>
-            </div>
-            <button
-              onClick={onAddBox}
-              className={`rounded-lg px-space-md py-space-xs font-sans text-label-lg font-semibold uppercase tracking-wider transition-all ${
-                isAdded
-                  ? "bg-secondary text-on-secondary scale-95"
-                  : "bg-primary-container text-parchment-deep hover:bg-racing-green-dark active:scale-95"
-              }`}
-            >
-              {isAdded ? "✓ Pridėta" : "Dėžutė"}
-            </button>
+          <div>
+            <span className="font-sans text-title-md font-bold text-on-surface">
+              {formatEur(boxPrice(product))}
+            </span>
+            <span className="ml-1 font-sans text-label-sm text-on-surface-variant/60">/ dėžutė</span>
+            <p className="font-sans text-label-sm text-on-surface-variant/70">
+              1 dėžutė = {product.moq} vnt. · Minimumas: 1 dėžutė
+            </p>
           </div>
 
-          <div className="flex items-center justify-between border-t border-outline-variant/30 pt-space-sm">
-            <div>
-              <span className="font-sans text-body-md font-semibold text-on-surface-variant">
-                €{piecePrice(product).toFixed(2)}
-              </span>
-              <span className="ml-1 font-sans text-label-sm text-on-surface-variant/60">/ vnt. (+€{product.single_unit_fee.toFixed(2)})</span>
-            </div>
-            <div className="flex items-center rounded-lg border border-outline-variant">
-              <button
-                onClick={onDecPiece}
-                disabled={pieceQty === 0}
-                className="px-3 py-1.5 text-on-surface-variant transition hover:text-on-surface disabled:cursor-not-allowed disabled:opacity-30"
-              >
-                −
-              </button>
-              <span className="min-w-[1.5rem] text-center font-sans text-body-md font-medium text-on-surface">
-                {pieceQty}
-              </span>
-              <button
-                onClick={onIncPiece}
-                className="px-3 py-1.5 text-on-surface-variant transition hover:text-on-surface"
-              >
-                +
-              </button>
-            </div>
-          </div>
+          <OrderControls line={toCartLine(product)} available={product.in_stock !== false} />
         </div>
       </div>
     </div>
