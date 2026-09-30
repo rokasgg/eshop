@@ -1,26 +1,153 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  /* Colors — Ahmad Tea London / UAB Temus brand palette (from Stitch export) */
+  --color-surface-tint: #476554;
+  --color-antique-gold-muted: #A8833B;
+  --color-on-tertiary-container: #6c947c;
+  --color-tertiary-fixed: #c2ecd2;
+  --color-secondary-container: #fed488;
+  --color-on-secondary-container: #785a1a;
+  --color-outline-variant: #c2c8c2;
+  --color-tertiary: #001208;
+  --color-on-tertiary: #ffffff;
+  --color-on-error-container: #93000a;
+  --color-charcoal-muted: #3D4146;
+  --color-secondary-fixed: #ffdea5;
+  --color-on-tertiary-fixed: #002113;
+  --color-surface-container: #f0ede9;
+  --color-secondary: #775a19;
+  --color-surface-dim: #dcdad5;
+  --color-primary-fixed-dim: #adceb9;
+  --color-primary-container: #0b291b;
+  --color-on-secondary-fixed: #261900;
+  --color-inverse-primary: #adceb9;
+  --color-on-primary: #ffffff;
+  --color-primary-fixed: #c9ebd4;
+  --color-error: #ba1a1a;
+  --color-on-secondary-fixed-variant: #5d4201;
+  --color-tertiary-container: #012a19;
+  --color-surface: #fcf9f4;
+  --color-surface-container-high: #ebe8e3;
+  --color-surface-container-lowest: #ffffff;
+  --color-on-primary-container: #73927f;
+  --color-on-primary-fixed-variant: #304d3d;
+  --color-tertiary-fixed-dim: #a6d0b6;
+  --color-inverse-on-surface: #f3f0eb;
+  --color-on-secondary: #ffffff;
+  --color-hairline-green: rgba(11, 41, 27, 0.12);
+  --color-surface-bright: #fcf9f4;
+  --color-on-surface-variant: #424843;
+  --color-charcoal-ink: #1C1E21;
+  --color-error-container: #ffdad6;
+  --color-antique-gold-bright: #D4AF37;
+  --color-outline: #727973;
+  --color-secondary-fixed-dim: #e9c176;
+  --color-surface-variant: #e5e2dd;
+  --color-background: #fcf9f4;
+  --color-surface-container-highest: #e5e2dd;
+  --color-parchment-deep: #F3EDE2;
+  --color-on-primary-fixed: #032113;
+  --color-on-background: #1c1c19;
+  --color-surface-container-low: #f6f3ee;
+  --color-primary: #001208;
+  --color-on-tertiary-fixed-variant: #284e3b;
+  --color-on-error: #ffffff;
+  --color-on-surface: #1c1c19;
+  --color-inverse-surface: #31302d;
+  --color-hairline-gold: rgba(197, 160, 89, 0.28);
+  --color-racing-green-dark: #061A11;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* Border radius */
+  --radius-DEFAULT: 0.125rem;
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.5rem;
+  --radius-full: 0.75rem;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Spacing scale */
+  --spacing-margin: 2rem;
+  --spacing-space-xl: 3rem;
+  --spacing-margin-mobile: 1.25rem;
+  --spacing-space-lg: 1.75rem;
+  --spacing-margin-desktop: 4rem;
+  --spacing-gutter-lg: 2.5rem;
+  --spacing-space-md: 1rem;
+  --spacing-gutter-sm: 1rem;
+  --spacing-gutter: 1.5rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-xs: 0.25rem;
+
+  /* Fonts — Manrope (body/label/title), Playfair Display (headlines/display) */
+  --font-sans: var(--font-manrope);
+  --font-serif: var(--font-playfair-display);
+
+  /* Type scale — matches Stitch's named font roles (size + line-height + letter-spacing + weight) */
+  --text-headline-md: 28px;
+  --text-headline-md--line-height: 36px;
+  --text-headline-md--letter-spacing: -0.01em;
+  --text-headline-md--font-weight: 500;
+
+  --text-headline-sm: 22px;
+  --text-headline-sm--line-height: 30px;
+  --text-headline-sm--letter-spacing: 0em;
+  --text-headline-sm--font-weight: 500;
+
+  --text-body-lg: 16px;
+  --text-body-lg--line-height: 26px;
+  --text-body-lg--letter-spacing: 0.005em;
+  --text-body-lg--font-weight: 400;
+
+  --text-display-hero-mobile: 36px;
+  --text-display-hero-mobile--line-height: 44px;
+  --text-display-hero-mobile--letter-spacing: -0.01em;
+  --text-display-hero-mobile--font-weight: 600;
+
+  --text-display-hero: 56px;
+  --text-display-hero--line-height: 68px;
+  --text-display-hero--letter-spacing: -0.02em;
+  --text-display-hero--font-weight: 600;
+
+  --text-headline-lg-mobile: 28px;
+  --text-headline-lg-mobile--line-height: 36px;
+  --text-headline-lg-mobile--letter-spacing: -0.01em;
+  --text-headline-lg-mobile--font-weight: 600;
+
+  --text-headline-lg: 40px;
+  --text-headline-lg--line-height: 48px;
+  --text-headline-lg--letter-spacing: -0.015em;
+  --text-headline-lg--font-weight: 600;
+
+  --text-body-sm: 12px;
+  --text-body-sm--line-height: 18px;
+  --text-body-sm--letter-spacing: 0.01em;
+  --text-body-sm--font-weight: 400;
+
+  --text-body-md: 14px;
+  --text-body-md--line-height: 22px;
+  --text-body-md--letter-spacing: 0em;
+  --text-body-md--font-weight: 400;
+
+  --text-label-sm: 11px;
+  --text-label-sm--line-height: 16px;
+  --text-label-sm--letter-spacing: 0.12em;
+  --text-label-sm--font-weight: 600;
+
+  --text-title-md: 18px;
+  --text-title-md--line-height: 26px;
+  --text-title-md--letter-spacing: 0.01em;
+  --text-title-md--font-weight: 600;
+
+  --text-label-lg: 13px;
+  --text-label-lg--line-height: 18px;
+  --text-label-lg--letter-spacing: 0.08em;
+  --text-label-lg--font-weight: 600;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+}
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
 }
