@@ -1,11 +1,11 @@
 import type { OccasionTag } from "../ShopClient";
 
 const OCCASIONS: { value: OccasionTag | "all"; icon: string; label: string; hint: string }[] = [
-  { value: "all", icon: "all_inclusive", label: "Visi Scenarijai", hint: "Pilna kolekcija" },
-  { value: "breakfast", icon: "free_breakfast", label: "Pusryčių Bufetas", hint: "Tvirtos, tonizuojančios" },
-  { value: "afternoon", icon: "bakery_dining", label: "Afternoon Tea", hint: "Bergamotė, gėlių natos" },
-  { value: "rooms", icon: "bed", label: "Room Service", hint: "Higieniški vokeliai" },
-  { value: "spa", icon: "spa", label: "SPA & Poilsis", hint: "Be kofeino, žolelės" },
+  { value: "all", icon: "all_inclusive", label: "Visi Scenarijai", hint: "Visa profesionali kolekcija" },
+  { value: "breakfast", icon: "free_breakfast", label: "Pusryčių Bufetas", hint: "Sodrios ir tonizuojančios arbatos" },
+  { value: "afternoon", icon: "bakery_dining", label: "Afternoon Tea", hint: "Bergamotės ir gėlių skoniai" },
+  { value: "rooms", icon: "bed", label: "Room Service", hint: "Individualūs ir higieniški formatai" },
+  { value: "spa", icon: "spa", label: "SPA & Poilsis", hint: "Žolelių ir arbatos be kofeino" },
 ];
 
 export default function OccasionNavigator({
@@ -18,54 +18,51 @@ export default function OccasionNavigator({
   return (
     <section className="w-full bg-surface-container px-margin-mobile py-space-xl lg:px-margin-desktop">
       <div className="mx-auto max-w-[1440px] space-y-space-lg">
-        <div className="flex flex-col gap-space-sm md:flex-row md:items-end md:justify-between">
-          <div>
-            <span className="font-sans text-label-sm uppercase tracking-widest text-antique-gold-muted">
-              Sensorinis Navigavimas
-            </span>
-            <h2 className="font-serif text-headline-md text-primary">Viešbučio ir Restorano Scenarijai</h2>
-          </div>
-          <div className="flex items-center gap-space-xs font-sans text-label-sm text-on-surface-variant">
-            <span className="material-symbols-outlined text-antique-gold-bright text-[18px]" aria-hidden="true">psychology</span>
-            <span>Spustelėkite scenarijų, norėdami filtruoti rekomenduojamus skonių profilius</span>
-          </div>
+        <div>
+          <span className="font-sans text-label-sm uppercase tracking-widest text-antique-gold-muted">
+            Pasirinkite naudojimo scenarijų
+          </span>
+          <h2 className="mt-space-xs font-serif text-headline-md text-primary">Viešbučio ir Restorano Scenarijai</h2>
         </div>
 
-        <div className="grid grid-cols-2 gap-space-md md:grid-cols-5">
+        {/* auto-rows-fr keeps every card the same height even if one hint wraps */}
+        <div className="grid auto-rows-fr grid-cols-2 gap-space-md md:grid-cols-5">
           {OCCASIONS.map((occasion) => {
             const isActive = active === occasion.value;
             return (
               <button
                 key={occasion.value}
+                type="button"
+                aria-pressed={isActive}
                 onClick={() => onChange(occasion.value)}
-                className={`flex h-36 flex-col justify-between rounded-xl p-space-md text-left shadow-sm transition-all ${
-                  isActive
-                    ? "bg-primary-container text-parchment-deep shadow-md"
-                    : "bg-surface text-on-surface hover:bg-surface-bright"
-                }`}
+                className={`relative flex flex-col overflow-hidden rounded-xl border px-space-md py-3 text-left transition-[transform,box-shadow,border-color] duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-antique-gold-bright motion-reduce:transform-none ${isActive
+                    ? "border-primary-container bg-primary-container text-parchment-deep"
+                    : "border-hairline-green bg-surface text-on-surface shadow-[0_1px_2px_rgba(11,41,27,0.04)] hover:-translate-y-0.5 hover:border-hairline-gold hover:shadow-[0_6px_16px_rgba(11,41,27,0.08)]"
+                  }`}
               >
-                <div className="flex w-full items-center justify-between">
-                  <span
-                    className={`material-symbols-outlined text-[26px] ${isActive ? "text-antique-gold-bright" : "text-secondary"}`}
-                    aria-hidden="true"
-                  >
-                    {occasion.icon}
-                  </span>
-                </div>
-                <div>
-                  <span className={`block font-sans text-title-md leading-snug ${isActive ? "" : "text-primary"}`}>
-                    {occasion.label}
-                  </span>
-                  <span className={`font-sans text-body-sm ${isActive ? "text-parchment-deep/70" : "text-on-surface-variant"}`}>
-                    {occasion.hint}
-                  </span>
-                </div>
+                {isActive && (
+                  <span aria-hidden="true" className="absolute inset-x-0 top-0 h-0.5 bg-antique-gold-muted" />
+                )}
+                <span
+                  className={`material-symbols-outlined text-[22px] leading-none ${isActive ? "text-antique-gold-bright" : "text-secondary"}`}
+                  aria-hidden="true"
+                >
+                  {occasion.icon}
+                </span>
+                <span className={`mt-6 block font-sans text-title-md leading-snug ${isActive ? "" : "text-primary"}`}>
+                  {occasion.label}
+                </span>
+                <span
+                  className={`mt-1.5 block font-sans text-body-sm leading-snug ${isActive ? "text-parchment-deep/70" : "text-on-surface-variant"}`}
+                >
+                  {occasion.hint}
+                </span>
               </button>
             );
           })}
         </div>
 
-        <SensoryFlavourLegend />
+        {/* <SensoryFlavourLegend /> */}
       </div>
     </section>
   );
@@ -73,35 +70,37 @@ export default function OccasionNavigator({
 
 function SensoryFlavourLegend() {
   const NOTES = [
-    { color: "#8E412E", label: "Malty & Robust (Salyklinis / Gilus)" },
-    { color: "#E5B800", label: "Citrus & Bergamot (Bergamotė / Gaiva)" },
-    { color: "#A2B890", label: "Floral & Jasmine (Gėlės / Subtilu)" },
-    { color: "#3D8B62", label: "Fresh Mint & Herbal (Mėta / Žolelės)" },
-    { color: "#BF3952", label: "Fruity & Spiced (Uogos / Cinamonas)" },
+    { color: "#8E412E", label: "Malty & Robust", lt: "Salyklinis / Gilus" },
+    { color: "#E5B800", label: "Citrus & Bergamot", lt: "Bergamotė / Gaiva" },
+    { color: "#A2B890", label: "Floral & Jasmine", lt: "Gėlės / Subtilu" },
+    { color: "#3D8B62", label: "Fresh Mint & Herbal", lt: "Mėta / Žolelės" },
+    { color: "#BF3952", label: "Fruity & Spiced", lt: "Uogos / Cinamonas" },
   ];
 
+  // Secondary to the scenario cards: quiet panel, compact read-only pills.
   return (
-    <div className="flex flex-col items-center justify-between gap-space-lg rounded-xl bg-parchment-deep p-space-lg lg:flex-row">
-      <div className="flex items-center gap-space-md">
-        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary-container text-antique-gold-bright shadow-sm">
-          <span className="material-symbols-outlined text-[24px]" aria-hidden="true">explore</span>
+    <div className="flex flex-col gap-space-md rounded-xl border border-hairline-green px-space-md py-space-md lg:flex-row lg:items-center lg:justify-between lg:gap-space-lg lg:px-space-lg">
+      <div className="flex shrink-0 items-center gap-space-sm">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[50%] bg-primary-container text-antique-gold-bright">
+          <span className="material-symbols-outlined text-[16px]" aria-hidden="true">explore</span>
         </div>
         <div>
-          <span className="font-sans text-label-sm uppercase tracking-wider text-antique-gold-muted">Sensory Radar Spektras</span>
-          <p className="font-sans text-title-md font-semibold text-primary">Skonio teritorijos &amp; Ahmad Tea Master Blender kompozicijos</p>
+          <span className="block font-sans text-label-sm uppercase tracking-widest text-antique-gold-muted">Skonio profiliai</span>
+          <p className="font-serif text-[18px] leading-snug text-primary">Ahmad Tea skonio spektras</p>
         </div>
       </div>
-      <div className="flex flex-wrap items-center justify-center gap-space-sm">
+      <ul className="flex flex-wrap gap-1.5 lg:justify-end">
         {NOTES.map((note) => (
-          <span
+          <li
             key={note.label}
-            className="flex items-center gap-space-xs rounded-full bg-surface px-space-md py-1.5 font-sans text-label-sm text-charcoal-ink shadow-sm"
+            className="flex h-7 items-center gap-1.5 rounded-[999px] border border-hairline-green bg-surface-container-low/60 px-2.5 font-sans text-[12px] leading-none"
           >
-            <span className="h-2 w-2 rounded-full" style={{ backgroundColor: note.color }} />
-            <span>{note.label}</span>
-          </span>
+            <span className="h-1.5 w-1.5 shrink-0 rounded-[50%]" style={{ backgroundColor: note.color }} aria-hidden="true" />
+            <span className="text-charcoal-ink/85">{note.label}</span>
+            <span className="text-on-surface-variant/60">{note.lt}</span>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }

@@ -1,0 +1,23 @@
+<script>
+    document.querySelectorAll(".tea-card").forEach((card) => {
+        const qtyEl = card.querySelector("[data-qty]");
+        const minus = card.querySelector('[data-action="minus"]');
+        const plus = card.querySelector('[data-action="plus"]');
+
+        let boxes = Number(qtyEl.textContent) || 1;
+
+        const render = () => {
+            qtyEl.textContent = boxes;
+        };
+
+        minus.addEventListener("click", () => {
+            boxes = Math.max(1, boxes - 1);
+            render();
+        });
+
+        plus.addEventListener("click", () => {
+            boxes += 1;
+            render();
+        });
+    });
+</script>

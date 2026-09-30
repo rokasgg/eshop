@@ -50,7 +50,7 @@ export default function OrderControls({
         ? "Kiekis atnaujintas"
         : isInOrder
           ? "Atnaujinti kiekį"
-          : "Pridėti į užsakymą";
+          : "Pridėti";
 
   const orderedLine = { ...line, boxQuantity: inCart };
 
@@ -67,15 +67,14 @@ export default function OrderControls({
           onClick={submit}
           disabled={!available || (unchanged && !confirmation)}
           aria-disabled={!available || unchanged}
-          className={`flex min-h-11 flex-1 items-center justify-center gap-space-xs rounded-lg px-space-md font-sans text-label-lg uppercase tracking-wider transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-antique-gold-bright disabled:cursor-not-allowed ${
-            !available
+          className={`flex min-h-11 flex-1 items-center justify-center gap-space-xs rounded-lg px-space-md font-sans text-label-lg uppercase tracking-wider transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-antique-gold-bright disabled:cursor-not-allowed ${!available
               ? "bg-surface-container-high text-on-surface-variant/60"
               : confirmation
                 ? "pointer-events-none bg-tertiary-fixed text-on-tertiary-fixed"
                 : unchanged
                   ? "border border-hairline-green bg-transparent text-on-surface-variant/50"
                   : "bg-primary-container text-parchment-deep hover:bg-racing-green-dark"
-          }`}
+            }`}
         >
           <span className="material-symbols-outlined text-[18px]" aria-hidden="true">
             {!available ? "block" : confirmation ? "check" : isInOrder ? "sync" : "add_shopping_cart"}
