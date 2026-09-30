@@ -52,8 +52,8 @@ export default function HotelProductCard({
           : "border-outline-variant/70 shadow-[0_10px_30px_rgba(19,34,26,0.04),0_2px_6px_rgba(19,34,26,0.03)] hover:border-outline-variant hover:shadow-[0_18px_40px_rgba(19,34,26,0.07),0_4px_10px_rgba(19,34,26,0.04)]"
       }`}
     >
-      {/* Media */}
-      <div className="relative m-2.5 h-[300px] overflow-hidden rounded-[14px] bg-surface-container-high @[30rem]:h-[360px]">
+      {/* Media — fixed height so every card in a row lines up */}
+      <div className="relative m-2.5 h-[264px] shrink-0 overflow-hidden rounded-[14px] bg-surface-container-high @[30rem]:h-[300px]">
         {product.image_url ? (
           <Image
             src={product.image_url}
@@ -61,96 +61,108 @@ export default function HotelProductCard({
             fill
             priority={priority}
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-            className={`object-cover ${available ? "" : "opacity-70 grayscale-[60%]"}`}
+            className={`object-cover object-top ${available ? "" : "opacity-70 grayscale-[60%]"}`}
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-surface-container-high to-primary-container" />
         )}
         {occasion && (
-          <span className="absolute left-4 top-4 z-10 inline-flex items-center gap-2 rounded-[999px] border border-antique-gold-muted/25 bg-surface/95 px-3.5 py-2 font-sans text-[12px] font-bold uppercase tracking-[0.09em] text-secondary backdrop-blur-sm">
-            <span className="h-[7px] w-[7px] shrink-0 rounded-[50%] bg-antique-gold-muted" aria-hidden="true" />
+          <span className="absolute left-3 top-3 z-10 inline-flex items-center gap-1.5 rounded-[999px] border border-antique-gold-muted/25 bg-surface/95 px-3 py-1.5 font-sans text-[11px] font-bold uppercase tracking-[0.09em] text-secondary backdrop-blur-sm">
+            <span className="h-1.5 w-1.5 shrink-0 rounded-[50%] bg-antique-gold-muted" aria-hidden="true" />
             {occasion}
           </span>
         )}
         {!available && (
-          <span className="absolute bottom-4 left-4 z-10 rounded-[999px] bg-surface/95 px-3.5 py-2 font-sans text-[12px] font-bold uppercase tracking-[0.09em] text-on-surface-variant">
+          <span className="absolute bottom-3 left-3 z-10 rounded-[999px] bg-surface/95 px-3 py-1.5 font-sans text-[11px] font-bold uppercase tracking-[0.09em] text-on-surface-variant">
             Šiuo metu neturime
           </span>
         )}
       </div>
 
       {/* Body */}
-      <div className="flex flex-1 flex-col px-5 pt-5 @[30rem]:px-7">
-        <div className="mb-3 flex items-center justify-between gap-4 font-sans">
-          <span className="text-[12px] font-bold uppercase tracking-[0.14em] text-antique-gold-muted">
+      <div className="flex flex-1 flex-col px-5 pb-4 pt-3 @[26rem]:px-6">
+        <div className="flex items-center justify-between gap-3 font-sans">
+          <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-antique-gold-muted">
             Ahmad Tea London
           </span>
           {product.sku && (
-            <span className="text-[11px] font-semibold uppercase tracking-[0.12em] text-outline">SKU {product.sku}</span>
+            <span className="truncate text-[10px] font-semibold uppercase tracking-[0.1em] text-outline">
+              SKU {product.sku}
+            </span>
           )}
         </div>
 
-        <div className="mb-6 flex flex-col gap-3.5 @[26rem]:flex-row @[26rem]:items-end @[26rem]:justify-between @[26rem]:gap-6">
-          <div className="min-w-0">
-            <h3 className="font-serif text-[30px] font-medium leading-[1.05] text-primary @[30rem]:text-[36px]">
-              {product.name}
-            </h3>
-            {teaKind && <p className="mt-2 font-sans text-[15px] tracking-[0.04em] text-on-surface-variant">{teaKind}</p>}
-            {flavorNotes.length > 0 && (
-              <p className="mt-2 font-serif text-[16px] font-semibold italic tracking-[0.04em] text-secondary">
-                {flavorNotes.join(" · ")}
-              </p>
-            )}
-          </div>
+        <h3
+          title={product.name}
+          className="mt-1.5 line-clamp-2 font-serif text-[30px] font-medium leading-[1.08] text-primary @[26rem]:text-[32px]"
+        >
+          {product.name}
+        </h3>
 
-          {hasStrength && (
-            <div className="border-t border-outline-variant/60 pt-3.5 @[26rem]:min-w-[132px] @[26rem]:border-l @[26rem]:border-t-0 @[26rem]:pl-5 @[26rem]:pt-0">
-              <span className="mb-2 block font-sans text-[13px] text-outline">Stiprumas</span>
+        {(teaKind || hasStrength) && (
+          <div className="mt-2 flex items-center justify-between gap-3 font-sans text-[14px] text-on-surface-variant">
+            <span className="truncate tracking-[0.02em]">{teaKind}</span>
+            {hasStrength && (
               <span
                 role="img"
-                className="flex gap-1.5"
-                title={`Kofeino lygis ${product.caffeine_level}/5`}
+                className="flex shrink-0 items-center gap-1"
+                title={`Stiprumas ${product.caffeine_level}/5`}
                 aria-label={`Stiprumas ${product.caffeine_level} iš 5`}
               >
                 {Array.from({ length: 5 }).map((_, i) => (
                   <CoffeeBean key={i} filled={i < product.caffeine_level!} />
                 ))}
               </span>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
+        )}
+        {flavorNotes.length > 0 && (
+          <p className="mt-1 truncate font-serif text-[15px] font-semibold italic tracking-[0.03em] text-secondary">
+            {flavorNotes.join(" · ")}
+          </p>
+        )}
 
-        <dl className="mt-auto grid grid-cols-[1fr_auto_1fr] items-center gap-3.5 border-t border-outline-variant/60 pb-6 pt-5 @[26rem]:gap-6">
+        <div className="min-h-4 flex-1" aria-hidden="true" />
+
+        {/* Specs — one compact row */}
+        <dl className="flex items-center gap-3 border-t border-outline-variant/60 pt-3 font-sans text-[14px]">
           <Spec icon="package_2" label="Pakuotė" value={product.package_size ?? "—"} />
-          <div className="h-11 w-px bg-outline-variant/60" aria-hidden="true" />
-          <Spec icon="inventory_2" label="Dėžutėje" value={`${product.moq} vnt.`} />
+          <span className="h-4 w-px shrink-0 bg-outline-variant/70" aria-hidden="true" />
+          <Spec icon="inventory_2" label="Dėžutėje" value={`${product.moq} vnt. dėžutėje`} />
         </dl>
       </div>
 
       {/* Purchase */}
-      <div className="mx-2.5 mb-2.5 rounded-2xl bg-parchment-deep p-5 @[30rem]:p-6">
-        <div className="flex flex-col gap-3 @[30rem]:flex-row @[30rem]:items-center @[30rem]:justify-between @[30rem]:gap-6">
-          <p className="flex items-baseline gap-2">
-            <strong className="font-serif text-[40px] font-semibold leading-none text-primary @[30rem]:text-[46px]">
+      <div className="mx-2.5 mb-2.5 rounded-2xl bg-parchment-deep px-4 py-[18px] @[26rem]:px-5">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <p className="flex items-baseline gap-1.5">
+            <strong className="font-serif text-[34px] font-semibold leading-none text-primary">
               {formatEur(line.pricePerBox)}
             </strong>
-            <span className="font-sans text-[16px] text-on-surface-variant">/ dėžutė</span>
+            <span className="font-sans text-[14px] text-on-surface-variant">/ dėžutė</span>
           </p>
           {cupPrice !== null && (
-            <p className="flex items-baseline gap-1.5 @[30rem]:border-l @[30rem]:border-antique-gold-muted/45 @[30rem]:pl-6">
-              <strong className="font-serif text-[24px] text-antique-gold-muted">{formatEur(cupPrice)}</strong>
-              <span className="font-sans text-[14px] text-on-surface-variant">/ puodelis</span>
+            <p className="flex items-baseline gap-1">
+              <strong className="font-serif text-[19px] text-antique-gold-muted">{formatEur(cupPrice)}</strong>
+              <span className="font-sans text-[13px] text-on-surface-variant">/ puodelis</span>
             </p>
           )}
         </div>
 
-        <p className="mt-3 font-sans text-[14px] tracking-[0.03em] text-on-surface-variant">
-          {product.moq} vnt. dėžutėje · Min. 1 dėžutė
-        </p>
+        {/* Same slot either way, so ordering doesn't change the card height */}
+        <div className="mt-1.5 flex min-h-5 items-center">
+          {order.isInOrder ? (
+            <OrderStatus order={order} />
+          ) : (
+            <p className="font-sans text-[13px] tracking-[0.02em] text-on-surface-variant">
+              {product.moq} vnt. dėžutėje · Min. 1 dėžutė
+            </p>
+          )}
+        </div>
 
-        <div className="mt-5 grid grid-cols-1 gap-3 @[30rem]:grid-cols-[minmax(190px,0.95fr)_1.15fr]">
+        <div className="mt-3.5 grid grid-cols-1 gap-2.5 @[20rem]:grid-cols-[minmax(0,42fr)_minmax(0,58fr)]">
           <div
-            className={`grid min-h-[58px] grid-cols-[54px_1fr_54px] overflow-hidden rounded-[10px] border border-outline-variant bg-surface-container-lowest ${
+            className={`grid h-[52px] grid-cols-[40px_1fr_40px] overflow-hidden rounded-[10px] border border-outline-variant bg-surface-container-lowest ${
               available ? "" : "opacity-50"
             }`}
           >
@@ -159,12 +171,15 @@ export default function HotelProductCard({
               onClick={() => order.setBoxes(order.boxes - 1)}
               disabled={!available || order.boxes <= 1}
               aria-label="Sumažinti kiekį"
-              className="text-[25px] text-on-surface transition-colors hover:bg-surface-container disabled:cursor-not-allowed disabled:opacity-30"
+              className="text-[22px] text-on-surface transition-colors hover:bg-surface-container disabled:cursor-not-allowed disabled:opacity-30"
             >
               −
             </button>
-            <span aria-live="polite" className="flex items-center justify-center gap-1.5 font-sans text-[17px] text-charcoal-ink">
-              <strong className="text-[19px]">{order.boxes}</strong>
+            <span
+              aria-live="polite"
+              className="flex min-w-0 items-center justify-center gap-1 whitespace-nowrap font-sans text-[14px] text-charcoal-ink"
+            >
+              <strong className="text-[17px]">{order.boxes}</strong>
               {boxesWord(order.boxes)}
             </span>
             <button
@@ -172,7 +187,7 @@ export default function HotelProductCard({
               onClick={() => order.setBoxes(order.boxes + 1)}
               disabled={!available}
               aria-label="Padidinti kiekį"
-              className="text-[25px] text-on-surface transition-colors hover:bg-surface-container disabled:cursor-not-allowed disabled:opacity-30"
+              className="text-[22px] text-on-surface transition-colors hover:bg-surface-container disabled:cursor-not-allowed disabled:opacity-30"
             >
               +
             </button>
@@ -182,7 +197,7 @@ export default function HotelProductCard({
             type="button"
             onClick={order.submit}
             disabled={order.submitDisabled}
-            className={`inline-flex min-h-[58px] items-center justify-center gap-2.5 rounded-[10px] px-5 font-sans text-[15px] font-bold uppercase tracking-[0.06em] transition-[background-color,transform] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-antique-gold-bright active:translate-y-px disabled:cursor-not-allowed ${
+            className={`inline-flex h-[52px] min-w-0 items-center justify-center gap-2 rounded-[10px] px-3 font-sans text-[13px] font-bold uppercase tracking-[0.05em] transition-[background-color,transform] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-antique-gold-bright active:translate-y-px disabled:cursor-not-allowed ${
               !available
                 ? "bg-surface-container-high text-on-surface-variant/60"
                 : order.confirmation
@@ -192,15 +207,11 @@ export default function HotelProductCard({
                     : "bg-primary-container text-white hover:bg-racing-green-dark"
             }`}
           >
-            <span className="material-symbols-outlined text-[19px]" aria-hidden="true">
+            <span className="material-symbols-outlined text-[18px]" aria-hidden="true">
               {order.icon}
             </span>
-            {order.label}
+            <span className="truncate">{order.label}</span>
           </button>
-        </div>
-
-        <div className="mt-3 empty:hidden">
-          <OrderStatus order={order} />
         </div>
       </div>
     </article>
@@ -209,14 +220,12 @@ export default function HotelProductCard({
 
 function Spec({ icon, label, value }: { icon: string; label: string; value: string }) {
   return (
-    <div className="flex min-w-0 items-center gap-3">
-      <span className="material-symbols-outlined grid h-[38px] w-[38px] shrink-0 place-items-center text-[25px] text-on-surface-variant" aria-hidden="true">
+    <div className="flex min-w-0 items-center gap-1.5">
+      <span className="material-symbols-outlined shrink-0 text-[18px] text-on-surface-variant" aria-hidden="true">
         {icon}
       </span>
-      <div className="min-w-0">
-        <dt className="mb-0.5 font-sans text-[13px] text-outline">{label}</dt>
-        <dd className="font-sans text-[18px] font-medium text-charcoal-ink">{value}</dd>
-      </div>
+      <dt className="sr-only">{label}</dt>
+      <dd className="truncate text-charcoal-ink">{value}</dd>
     </div>
   );
 }
@@ -226,7 +235,7 @@ function CoffeeBean({ filled }: { filled: boolean }) {
     <svg
       viewBox="0 0 16 16"
       aria-hidden="true"
-      className={`h-[18px] w-[18px] ${filled ? "text-antique-gold-muted" : "text-outline-variant/70"}`}
+      className={`h-3.5 w-3.5 ${filled ? "text-antique-gold-muted" : "text-outline-variant/70"}`}
     >
       <g transform="rotate(35 8 8)">
         <ellipse cx="8" cy="8" rx="4.6" ry="6.6" fill="currentColor" />
