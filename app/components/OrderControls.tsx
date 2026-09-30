@@ -67,12 +67,19 @@ export function useBoxOrder(
   };
 }
 
-export function OrderStatus({ order }: { order: ReturnType<typeof useBoxOrder> }) {
+export function OrderStatus({ order, compact = false }: { order: ReturnType<typeof useBoxOrder>; compact?: boolean }) {
   if (!order.isInOrder) return null;
   return (
-    <p className="flex items-center gap-space-xs font-sans text-label-sm text-on-tertiary-fixed-variant" role="status">
-      <span className="material-symbols-outlined text-[16px]" aria-hidden="true">check_circle</span>
-      <span>
+    <p
+      className={`flex min-w-0 items-center gap-space-xs font-sans text-on-tertiary-fixed-variant ${
+        compact ? "whitespace-nowrap text-[10.5px]" : "text-label-sm"
+      }`}
+      role="status"
+    >
+      <span className={`material-symbols-outlined shrink-0 ${compact ? "text-[13px]! leading-none!" : "text-[16px]"}`} aria-hidden="true">
+        check_circle
+      </span>
+      <span className={compact ? "truncate" : undefined}>
         Jūsų užsakyme: {boxesLabel(order.inCart)} · {totalUnits(order.orderedLine)} vnt. ·{" "}
         {formatEur(lineTotal(order.orderedLine))}
       </span>

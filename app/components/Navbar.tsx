@@ -45,7 +45,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-30 w-full bg-surface/95 backdrop-blur-xl shadow-[0_1px_8px_rgba(11,41,27,0.06)]">
       {/* Top utility bar */}
       <div className="hidden bg-racing-green-dark text-parchment-deep text-label-sm font-sans font-bold uppercase tracking-widest lg:block">
-        <div className="mx-auto flex h-10 max-w-[1440px] items-center justify-between px-margin-desktop">
+        <div className="mx-auto flex h-8 max-w-[1440px] items-center justify-between px-margin-desktop">
           <div className="flex items-center gap-space-sm">
             <span className="h-1.5 w-1.5 rounded-full bg-antique-gold-bright" />
             <span>Oficialus Ahmad Tea London distributorius Lietuvoje (HoReCa partneriams)</span>
@@ -63,7 +63,7 @@ export default function Navbar() {
       </div>
 
       {/* Main nav */}
-      <nav className="mx-auto flex h-20 max-w-[1440px] items-center justify-between px-margin-mobile lg:px-margin-desktop">
+      <nav className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-margin-mobile lg:px-margin-desktop">
         <Link href="/" className="flex shrink-0 flex-col">
           <span className="font-serif text-headline-sm text-primary font-bold tracking-tight">
             AHMAD TEA LONDON
@@ -73,7 +73,7 @@ export default function Navbar() {
           </span>
         </Link>
 
-        <ul className="hidden items-center gap-space-lg lg:flex">
+        <ul className="hidden items-center gap-6 lg:flex">
           {NAV_LINKS.map((link) => {
             const isActive = link.href === activeHref;
             return (

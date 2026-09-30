@@ -16,17 +16,17 @@ export default function OccasionNavigator({
   onChange: (value: OccasionTag | "all") => void;
 }) {
   return (
-    <section className="w-full bg-surface-container px-margin-mobile py-space-xl lg:px-margin-desktop">
-      <div className="mx-auto max-w-[1440px] space-y-space-lg">
+    <section className="w-full bg-surface-container px-margin-mobile py-6 lg:px-margin-desktop">
+      <div className="mx-auto max-w-[1440px] space-y-4">
         <div>
-          <span className="font-sans text-label-sm uppercase tracking-widest text-antique-gold-muted">
+          <span className="font-sans text-[10.5px] uppercase tracking-widest text-antique-gold-muted">
             Pasirinkite naudojimo scenarijų
           </span>
-          <h2 className="mt-space-xs font-serif text-headline-md text-primary">Viešbučio ir Restorano Scenarijai</h2>
+          <h2 className="mt-1 font-serif text-[26px] leading-tight text-primary">Viešbučio ir Restorano Scenarijai</h2>
         </div>
 
         {/* auto-rows-fr keeps every card the same height even if one hint wraps */}
-        <div className="grid auto-rows-fr grid-cols-2 gap-space-md md:grid-cols-5">
+        <div className="grid auto-rows-fr grid-cols-2 gap-3 md:grid-cols-5 lg:gap-4">
           {OCCASIONS.map((occasion) => {
             const isActive = active === occasion.value;
             return (
@@ -35,7 +35,7 @@ export default function OccasionNavigator({
                 type="button"
                 aria-pressed={isActive}
                 onClick={() => onChange(occasion.value)}
-                className={`relative flex flex-col overflow-hidden rounded-xl border px-space-md py-3 text-left transition-[transform,box-shadow,border-color] duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-antique-gold-bright motion-reduce:transform-none ${isActive
+                className={`relative flex flex-col overflow-hidden rounded-xl border px-4 py-3 text-left transition-[transform,box-shadow,border-color] duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-antique-gold-bright motion-reduce:transform-none ${isActive
                     ? "border-primary-container bg-primary-container text-parchment-deep"
                     : "border-hairline-green bg-surface text-on-surface shadow-[0_1px_2px_rgba(11,41,27,0.04)] hover:-translate-y-0.5 hover:border-hairline-gold hover:shadow-[0_6px_16px_rgba(11,41,27,0.08)]"
                   }`}
@@ -44,16 +44,16 @@ export default function OccasionNavigator({
                   <span aria-hidden="true" className="absolute inset-x-0 top-0 h-0.5 bg-antique-gold-muted" />
                 )}
                 <span
-                  className={`material-symbols-outlined text-[22px] leading-none ${isActive ? "text-antique-gold-bright" : "text-secondary"}`}
+                  className={`material-symbols-outlined text-[19px] leading-none ${isActive ? "text-antique-gold-bright" : "text-secondary"}`}
                   aria-hidden="true"
                 >
                   {occasion.icon}
                 </span>
-                <span className={`mt-6 block font-sans text-title-md leading-snug ${isActive ? "" : "text-primary"}`}>
+                <span className={`mt-3 block font-sans text-[16px] font-medium leading-snug ${isActive ? "" : "text-primary"}`}>
                   {occasion.label}
                 </span>
                 <span
-                  className={`mt-1.5 block font-sans text-body-sm leading-snug ${isActive ? "text-parchment-deep/70" : "text-on-surface-variant"}`}
+                  className={`mt-0.5 block font-sans text-[11.5px] leading-snug ${isActive ? "text-parchment-deep/70" : "text-on-surface-variant"}`}
                 >
                   {occasion.hint}
                 </span>

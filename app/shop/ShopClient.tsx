@@ -6,7 +6,7 @@ import Link from "next/link";
 import OrderControls from "../components/OrderControls";
 import { formatEur, type CartLine } from "@/lib/cart";
 
-export type TeaCategory = "black" | "green" | "herbal" | "white_oolong";
+export type TeaCategory = "black" | "green" | "herbal" | "fruit" | "white_oolong";
 export type OccasionTag = "breakfast" | "afternoon" | "rooms" | "spa";
 
 export type ShopProduct = {

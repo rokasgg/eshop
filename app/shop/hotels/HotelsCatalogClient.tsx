@@ -56,6 +56,8 @@ export default function HotelsCatalogClient({ products }: { products: ShopProduc
         return list.sort((a, b) => (perCupPrice(a) ?? Infinity) - (perCupPrice(b) ?? Infinity));
       case "caffeine":
         return list.sort((a, b) => (b.caffeine_level ?? 0) - (a.caffeine_level ?? 0));
+      case "name":
+        return list.sort((a, b) => a.name.localeCompare(b.name, "lt"));
       default:
         return list;
     }
@@ -79,9 +81,9 @@ export default function HotelsCatalogClient({ products }: { products: ShopProduc
         onCaffeineChange={setCaffeine}
       />
 
-      <section className="w-full bg-surface px-margin-mobile py-space-xl lg:px-margin-desktop">
+      <section className="w-full bg-surface px-margin-mobile pb-space-xl pt-4 lg:px-margin-desktop">
         <div className="mx-auto max-w-[1440px]">
-          <p className="mb-space-md font-sans text-body-md text-on-surface-variant">
+          <p className="mb-3 font-sans text-[13px] text-on-surface-variant">
             {sorted.length} produkt{sorted.length !== 1 ? "ai" : "as"}
           </p>
 
@@ -90,7 +92,7 @@ export default function HotelsCatalogClient({ products }: { products: ShopProduc
               <p className="font-sans text-body-lg font-medium">Nė vienas produktas neatitinka filtrų.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-space-md sm:grid-cols-2 lg:grid-cols-3 lg:gap-gutter">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-5 xl:grid-cols-3">
               {sorted.map((product, index) => (
                 <HotelProductCard key={product.id} product={product} priority={index < 3} />
               ))}
