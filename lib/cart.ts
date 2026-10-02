@@ -23,24 +23,14 @@ export const clampBoxes = (n: number) => Math.max(1, Math.floor(Number.isFinite(
 // Set either field to enforce it in the cart; null means no threshold.
 export const MIN_ORDER: { eur?: number; boxes?: number } | null = null;
 
-export function minOrderShortfall(subtotal: number, boxes: number): string | null {
+// Returned as data; the cart drawer turns it into text in the current language
+export type MinOrderShortfall = { kind: "eur"; amount: number } | { kind: "boxes"; boxes: number };
+
+export function minOrderShortfall(subtotal: number, boxes: number): MinOrderShortfall | null {
   if (!MIN_ORDER) return null;
-  if (MIN_ORDER.eur && subtotal < MIN_ORDER.eur) return `Minimali užsakymo suma: ${formatEur(MIN_ORDER.eur)}`;
-  if (MIN_ORDER.boxes && boxes < MIN_ORDER.boxes) return `Minimalus užsakymas: ${boxesLabel(MIN_ORDER.boxes)}`;
+  if (MIN_ORDER.eur && subtotal < MIN_ORDER.eur) return { kind: "eur", amount: MIN_ORDER.eur };
+  if (MIN_ORDER.boxes && boxes < MIN_ORDER.boxes) return { kind: "boxes", boxes: MIN_ORDER.boxes };
   return null;
-}
-
-// Lithuanian plural forms: 1 dėžutė, 2–9 dėžutės, 10–20 dėžučių, 21 dėžutė…
-export function boxesWord(n: number) {
-  const mod10 = n % 10;
-  const mod100 = n % 100;
-  if (mod10 === 1 && mod100 !== 11) return "dėžutė";
-  if (mod10 >= 2 && (mod100 < 10 || mod100 >= 20)) return "dėžutės";
-  return "dėžučių";
-}
-
-export function boxesLabel(n: number) {
-  return `${n} ${boxesWord(n)}`;
 }
 
 export function formatEur(value: number) {

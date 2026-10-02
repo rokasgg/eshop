@@ -1,47 +1,32 @@
-const STEPS = [
-  {
-    number: 1,
-    title: "Pasirinkite arbatas",
-    body: "Išsirinkite norimas arbatas iš plataus Ahmad Tea asortimento ir pridėkite jas į „Mano pasirinkimą“ be jokių išankstinių įsipareigojimų.",
-    icon: "touch_app",
-    tag: "Intuityvus prekių krepšelis",
-  },
-  {
-    number: 2,
-    title: "Pateikite užklausą kainų pasiūlymui",
-    body: "Nurodykite preliminarų poreikį ar pageidaujamą formatą: biri arbata, prabangios šilkinės piramidės ar higieniški klasikiniai vokeliai.",
-    icon: "request_quote",
-    tag: "B2B individuali kainodara",
-  },
-  {
-    number: 3,
-    title: "Gaukite asmeninį pasiūlymą per 24 val.",
-    body: "Paruošime individualią didmeninių kainų lentelę pagal Jūsų apyvartos apimtis ir išsiųsime nemokamą degustacinį rinkinį Jūsų komandai.",
-    icon: "mark_email_read",
-    tag: "Operatyvus vadybininko atsakas",
-  },
-];
+import { getI18n } from "@/app/[lang]/dictionaries";
+import type { Locale } from "@/lib/i18n";
 
-export default function HowItWorks() {
+// Texts live in the dictionaries under home.howItWorks.steps, in this order
+const STEP_ICONS = ["touch_app", "request_quote", "mark_email_read"];
+
+export default async function HowItWorks({ lang }: { lang: Locale }) {
+  const { t } = await getI18n(lang);
+  const c = t.home.howItWorks;
+  const steps = c.steps.map((step, i) => ({ ...step, number: i + 1, icon: STEP_ICONS[i] }));
   return (
     <section className="w-full bg-surface-container-low px-margin-mobile py-space-xl lg:px-margin-desktop">
       <div className="mx-auto flex max-w-[1440px] flex-col gap-space-xl">
         <div className="flex flex-col gap-space-md md:flex-row md:items-end md:justify-between">
           <div className="flex max-w-2xl flex-col gap-space-xs">
             <span className="font-sans text-label-sm font-bold uppercase tracking-widest text-secondary">
-              PAPRASTAS IR LANKSTUS BENDRADARBIAVIMAS
+              {c.eyebrow}
             </span>
             <h2 className="font-serif text-headline-lg-mobile text-primary lg:text-headline-lg">
-              Nuo arbatos pasirinkimo iki nepriekaištingo serviso svečiams
+              {c.title}
             </h2>
           </div>
           <p className="max-w-sm font-sans text-body-md text-on-surface-variant">
-            Sukurta taupyti virtuvės šefų, pirkimų vadovų ir restorano administratorių laiką.
+            {c.intro}
           </p>
         </div>
 
         <div className="grid grid-cols-1 gap-gutter-lg md:grid-cols-3">
-          {STEPS.map((step) => (
+          {steps.map((step) => (
             <div
               key={step.number}
               className="group flex flex-col gap-space-md overflow-hidden rounded-xl bg-surface p-space-lg shadow-sm transition-shadow hover:shadow-md"

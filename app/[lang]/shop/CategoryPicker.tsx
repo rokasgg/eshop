@@ -3,18 +3,21 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { ALL_CATEGORY_SLUG, CATALOG_CATEGORIES, positionsLabel } from "@/lib/categories";
+import { ALL_CATEGORY_SLUG, CATALOG_CATEGORIES } from "@/lib/categories";
+import { useI18n } from "@/app/components/I18nProvider";
 import { catalogHref, goToCatalog, isPlainClick } from "./catalogNav";
 import type { ShopProduct } from "./ShopClient";
 
 // Entry view of /shop: pick a category first, or jump straight to search.
 export default function CategoryPicker({ products }: { products: ShopProduct[] }) {
+  const { t, lang, plural } = useI18n();
   const [query, setQuery] = useState("");
 
   const tiles = CATALOG_CATEGORIES.map((c) => {
     const items = products.filter(c.match);
     return {
       ...c,
+      ...t.categories[c.slug],
       count: items.length,
       isCategoryPhoto: !!c.image,
       image: c.image ?? items.find((p) => p.image_url)?.image_url ?? null,
@@ -23,16 +26,16 @@ export default function CategoryPicker({ products }: { products: ShopProduct[] }
 
   const search = (e: React.FormEvent) => {
     e.preventDefault();
-    goToCatalog({ kategorija: ALL_CATEGORY_SLUG, paieska: query.trim() || undefined }, { scrollTop: true });
+    goToCatalog(lang, { kategorija: ALL_CATEGORY_SLUG, paieska: query.trim() || undefined }, { scrollTop: true });
   };
 
   return (
     <section className="mx-auto max-w-[1440px] px-margin-mobile pb-space-xl pt-6 lg:px-margin-desktop">
       <div className="mb-4">
         <span className="font-sans text-[10.5px] uppercase tracking-widest text-antique-gold-muted">
-          {positionsLabel(products.length)} · {tiles.length - 1} kategorijos
+          {plural(products.length, t.common.positions)} · {plural(tiles.length - 1, t.common.categoriesCount)}
         </span>
-        <h2 className="mt-1 font-serif text-[26px] leading-tight text-primary">Pasirinkite arbatos kategoriją</h2>
+        <h2 className="mt-1 font-serif text-[26px] leading-tight text-primary">{t.catalog.pickTitle}</h2>
       </div>
 
       <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -41,11 +44,11 @@ export default function CategoryPicker({ products }: { products: ShopProduct[] }
           return (
             <li key={tile.slug}>
               <Link
-                href={catalogHref({ kategorija: tile.slug })}
+                href={catalogHref(lang, { kategorija: tile.slug })}
                 onClick={(e) => {
                   if (!isPlainClick(e)) return;
                   e.preventDefault();
-                  goToCatalog({ kategorija: tile.slug }, { scrollTop: true });
+                  goToCatalog(lang, { kategorija: tile.slug }, { scrollTop: true });
                 }}
                 className={`group flex h-full overflow-hidden rounded-[14px] border transition-[transform,box-shadow,border-color] duration-300 ease-out hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-antique-gold-bright motion-reduce:transform-none ${
                   isAll
@@ -83,7 +86,7 @@ export default function CategoryPicker({ products }: { products: ShopProduct[] }
                   </p>
                   <div className="mt-auto flex items-center justify-between pt-4">
                     <span className={`font-sans text-[12px] ${isAll ? "text-parchment-deep/80" : "text-on-surface-variant"}`}>
-                      {positionsLabel(tile.count)}
+                      {plural(tile.count, t.common.positions)}
                     </span>
                     <span
                       className={`material-symbols-outlined text-[18px]! transition-transform duration-300 group-hover:translate-x-0.5 ${
@@ -107,7 +110,7 @@ export default function CategoryPicker({ products }: { products: ShopProduct[] }
         className="mt-5 flex flex-col gap-3 rounded-[14px] border border-hairline-green bg-surface-container-low px-4 py-3 sm:flex-row sm:items-center"
       >
         <label htmlFor="catalog-quick-search" className="shrink-0 font-sans text-[13px] text-on-surface-variant">
-          Žinote, ko ieškote?
+          {t.catalog.quickSearchLabel}
         </label>
         <div className="relative flex h-11 flex-1 items-center rounded-[10px] border border-outline-variant/70 bg-surface-container-lowest focus-within:ring-2 focus-within:ring-secondary/40">
           <span className="material-symbols-outlined pointer-events-none absolute left-3 text-[20px]! text-on-surface-variant" aria-hidden="true">
@@ -118,7 +121,7 @@ export default function CategoryPicker({ products }: { products: ShopProduct[] }
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Ieškokite pagal pavadinimą ar SKU…"
+            placeholder={t.catalog.quickSearchPlaceholder}
             className="h-full w-full rounded-[10px] bg-transparent pl-10 pr-3 font-sans text-[14px] text-charcoal-ink outline-none placeholder:text-outline"
           />
         </div>
@@ -126,7 +129,7 @@ export default function CategoryPicker({ products }: { products: ShopProduct[] }
           type="submit"
           className="h-11 shrink-0 rounded-[10px] bg-primary-container px-5 font-sans text-[13px] font-bold uppercase tracking-[0.05em] text-white transition-colors hover:bg-racing-green-dark"
         >
-          Ieškoti
+          {t.catalog.search}
         </button>
       </form>
     </section>

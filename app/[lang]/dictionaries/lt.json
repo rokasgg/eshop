@@ -1,0 +1,424 @@
+{
+  "meta": {
+    "title": "Ahmad Tea London | Oficialus platintojas Lietuvoje",
+    "description": "Oficialus „Ahmad Tea London“ atstovas Lietuvoje — didmeninė arbatos prekyba viešbučiams, restoranams ir kavinėms."
+  },
+  "common": {
+    "boxes": {
+      "one": "{n} dėžutė",
+      "few": "{n} dėžutės",
+      "other": "{n} dėžučių"
+    },
+    "boxesWord": {
+      "one": "dėžutė",
+      "few": "dėžutės",
+      "other": "dėžučių"
+    },
+    "positions": {
+      "one": "{n} pozicija",
+      "few": "{n} pozicijos",
+      "other": "{n} pozicijų"
+    },
+    "products": {
+      "one": "{n} produktas",
+      "few": "{n} produktai",
+      "other": "{n} produktų"
+    },
+    "categoriesCount": {
+      "one": "{n} kategorija",
+      "few": "{n} kategorijos",
+      "other": "{n} kategorijų"
+    },
+    "units": "{n} vnt.",
+    "unitsInBox": "{n} vnt. dėžutėje",
+    "perBox": "/ dėžutę",
+    "perCup": "/ puodelį",
+    "boxEquals": "1 dėžutė = {n} vnt.",
+    "minimumOneBox": "Mažiausias kiekis: 1 dėžutė",
+    "minOneBoxShort": "Min. 1 dėžutė",
+    "outOfStock": "Šiuo metu nėra sandėlyje",
+    "brand": "Ahmad Tea London"
+  },
+  "nav": {
+    "links": {
+      "shop": "Arbatos",
+      "hotels": "Viešbučiams",
+      "about": "Apie mus",
+      "contacts": "Kontaktai"
+    },
+    "topBar": "Oficialus „Ahmad Tea London“ platintojas Lietuvoje (HoReCa partneriams)",
+    "tagline": "Oficialus platintojas Lietuvoje (UAB „Temus“)",
+    "catalog": "Katalogas",
+    "cartAria": "Mano pasirinkimas, {boxes}",
+    "selectLanguage": "Pasirinkite kalbą",
+    "languages": {
+      "lt": "Lietuvių",
+      "en": "English"
+    }
+  },
+  "footer": {
+    "tagline": "UAB „Temus“ — oficialus „Ahmad Tea“ atstovas Lietuvoje nuo 1995 m. Tiekiame aukščiausios kokybės britišką arbatą Lietuvos viešbučiams, restoranams ir kavinėms.",
+    "copyright": "© 1995–{year} UAB „Temus“. Oficialus „Ahmad Tea London“ atstovas Lietuvoje. Visos teisės saugomos.",
+    "navigation": "Navigacija",
+    "contacts": "Kontaktai",
+    "city": "Vilnius, Lietuva"
+  },
+  "order": {
+    "add": "Pridėti",
+    "toOrder": "Į užsakymą",
+    "added": "Pridėta į užsakymą",
+    "addedShort": "Pridėta",
+    "updated": "Kiekis atnaujintas",
+    "update": "Atnaujinti kiekį",
+    "inOrderStatus": "Jūsų užsakyme: {boxes} · {units} · {total}",
+    "inOrderBadge": "Užsakyme · {boxes}",
+    "decrease": "Sumažinti kiekį",
+    "increase": "Padidinti kiekį",
+    "oneBoxLess": "Viena dėžute mažiau",
+    "oneBoxMore": "Viena dėžute daugiau"
+  },
+  "cart": {
+    "title": "Krepšelis",
+    "titleWithCount": "Krepšelis ({boxes})",
+    "deliveryTitle": "Pristatymo duomenys",
+    "confirmedTitle": "Užsakymas patvirtintas",
+    "close": "Uždaryti",
+    "empty": "Jūsų krepšelis tuščias",
+    "lineUnits": "{perBox} vnt. dėžutėje · iš viso {total} vnt.",
+    "remove": "Pašalinti",
+    "subtotal": "Tarpinė suma",
+    "continue": "Tęsti užsakymą →",
+    "back": "← Atgal",
+    "submit": "Pateikti užsakymą",
+    "submitting": "Pateikiama…",
+    "minOrderEur": "Minimali užsakymo suma: {amount}",
+    "minOrderBoxes": "Minimalus užsakymas: {boxes}"
+  },
+  "checkout": {
+    "name": "Vardas ir pavardė",
+    "namePlaceholder": "Jonas Petraitis",
+    "email": "El. paštas",
+    "emailPlaceholder": "jonas@imone.lt",
+    "phone": "Telefonas",
+    "phonePlaceholder": "+370 600 00000",
+    "address": "Pristatymo adresas",
+    "addressPlaceholder": "Gatvė, miestas, pašto kodas",
+    "notes": "Pastabos (nebūtina)",
+    "notesPlaceholder": "Papildomi pageidavimai?",
+    "summary": "Užsakymo santrauka",
+    "summaryUnits": "({n} vnt.)",
+    "total": "Viso",
+    "required": "Privaloma",
+    "invalidEmail": "Neteisingas el. pašto adresas",
+    "error": "Įvyko klaida. Bandykite dar kartą.",
+    "successTitle": "Užsakymas pateiktas!",
+    "successThanks": "Ačiū{name}! Netrukus susisieksime ir patvirtinsime pristatymo informaciją.",
+    "orderId": "Užsakymo Nr.: {id}",
+    "continueShopping": "Tęsti apsipirkimą"
+  },
+  "categories": {
+    "juodoji": {
+      "label": "Juodoji arbata",
+      "eyebrow": "Juodoji arbata",
+      "description": "„English Breakfast“, „Earl Grey“, Ceilono ir Asamo arbatos klasika"
+    },
+    "zalioji": {
+      "label": "Žalioji arbata",
+      "eyebrow": "Žalioji arbata",
+      "description": "Gryna žalioji arbata, žalioji arbata su jazminais ir mėtomis"
+    },
+    "vaisiu": {
+      "label": "Vaisių arbata",
+      "eyebrow": "Vaisių užpilai",
+      "description": "Sodrūs uogų ir vaisių mišiniai"
+    },
+    "zoleliu": {
+      "label": "Žolelių arbata",
+      "eyebrow": "Natūralios žolelių arbatos",
+      "description": "Natūralios žolelių kompozicijos gerai savijautai"
+    },
+    "be-kofeino": {
+      "label": "Be kofeino",
+      "eyebrow": "Be kofeino",
+      "description": "Tinka vakarui, SPA erdvėms ir ramiam svečių poilsiui"
+    },
+    "visos": {
+      "label": "Visos arbatos",
+      "eyebrow": "Visas katalogas",
+      "description": "Visas arbatos asortimentas vienoje vietoje"
+    }
+  },
+  "teaCategories": {
+    "black": "Juodoji",
+    "green": "Žalioji",
+    "white_oolong": "Baltoji / ulongo",
+    "herbal": "Žolelių",
+    "fruit": "Vaisių"
+  },
+  "teaTypes": {
+    "loose": "Biri arbata",
+    "bags": "Arbatos pakeliai"
+  },
+  "occasions": {
+    "all": {
+      "label": "Visi scenarijai",
+      "hint": "Visa profesionali kolekcija"
+    },
+    "breakfast": {
+      "label": "Pusryčių bufetas",
+      "hint": "Sodrios ir tonizuojančios arbatos"
+    },
+    "afternoon": {
+      "label": "Popietės arbata",
+      "hint": "Bergamočių ir gėlių aromatų arbatos"
+    },
+    "rooms": {
+      "label": "Aptarnavimas kambariuose",
+      "hint": "Individualios ir higieniškos pakuotės"
+    },
+    "spa": {
+      "label": "SPA ir poilsis",
+      "hint": "Žolelių arbatos ir arbatos be kofeino"
+    }
+  },
+  "card": {
+    "packaging": "Pakuotė",
+    "inBox": "Dėžutėje",
+    "strengthTitle": "Stiprumas {n}/5",
+    "strengthAria": "Stiprumas {n} iš 5"
+  },
+  "catalog": {
+    "eyebrow": "HoReCa didmeninė prekyba",
+    "title": "„Ahmad Tea“ katalogas",
+    "subtitle": "Didmeninė arbata kavinėms, restoranams ir viešbučiams visoje Lietuvoje",
+    "pickTitle": "Pasirinkite arbatos kategoriją",
+    "quickSearchLabel": "Žinote, ko ieškote?",
+    "quickSearchPlaceholder": "Ieškokite pagal pavadinimą ar SKU…",
+    "search": "Ieškoti",
+    "allCategories": "Visos kategorijos",
+    "categoriesAria": "Arbatos kategorijos",
+    "filterSearch": "Paieška",
+    "filterSearchPlaceholder": "Pavadinimas ar SKU…",
+    "filterTeaType": "Arbatos tipas",
+    "filterPackage": "Pakuotės dydis",
+    "filterMaxPrice": "Didžiausia dėžutės kaina",
+    "upTo": "iki {amount}",
+    "clearAllFilters": "Išvalyti visus filtrus",
+    "clearAll": "Išvalyti visus",
+    "filters": "Filtrai",
+    "noResults": "Nė vienas produktas neatitinka filtrų.",
+    "clearFilters": "Išvalyti filtrus",
+    "sort": {
+      "default": "Rikiuoti: numatyta tvarka",
+      "price-asc": "Kaina: nuo mažiausios",
+      "price-desc": "Kaina: nuo didžiausios",
+      "name": "Pavadinimas: A → Z"
+    }
+  },
+  "product": {
+    "back": "← Atgal į katalogą",
+    "minOrder": "Minimalus užsakymas",
+    "minOrderValue": "1 dėžutė ({n} vnt.)",
+    "pricePerUnit": "({amount} / vnt.)"
+  },
+  "hotels": {
+    "eyebrow": "Ahmad Tea London · HoReCa kolekcija",
+    "title": "Arbatos kolekcija viešbučiams",
+    "lead": "Atrinktas „Ahmad Tea“ asortimentas viešbučių pusryčiams, popietės arbatai, aptarnavimui kambariuose, SPA erdvėms ir svečių kambariams.",
+    "sub": "Skonio ir aromato profiliai bei profesionalios pakuotės padeda greitai pasirinkti tinkamiausias arbatas kiekvienam aptarnavimo scenarijui.",
+    "statCatalog": "Katalogas",
+    "statCatalogNote": "Sandėlyje Vilniuje",
+    "statDelivery": "B2B pristatymas",
+    "statDeliveryValue": "24–48 val.",
+    "statDeliveryNote": "Visoje Lietuvoje",
+    "scenariosEyebrow": "Pasirinkite naudojimo scenarijų",
+    "scenariosTitle": "Viešbučių ir restoranų aptarnavimo scenarijai",
+    "searchLabel": "Paieška",
+    "searchPlaceholder": "Ieškoti pagal pavadinimą, SKU ar skonį…",
+    "sortLabel": "Rikiuoti:",
+    "sort": {
+      "default": "Numatyta tvarka",
+      "price-asc": "Kaina: nuo mažiausios",
+      "price-desc": "Kaina: nuo didžiausios",
+      "cup-asc": "Kaina puodeliui",
+      "caffeine": "Kofeino intensyvumas",
+      "name": "Pavadinimas A–Ž"
+    },
+    "order": "Užsakymas",
+    "orderAria": "Užsakymas, {boxes}",
+    "groupType": "Tipas",
+    "groupPackage": "Pakuotė",
+    "groupCaffeine": "Kofeinas",
+    "all": "Visi",
+    "allSizes": "Visos",
+    "caffeineFree": "Be kofeino",
+    "allLevels": "Visi lygiai",
+    "highCaffeine": "Didelis kiekis",
+    "noResults": "Nė vienas produktas neatitinka filtrų.",
+    "equipmentEyebrow": "HoReCa serviravimo priemonės",
+    "equipmentTitle": "Mediniai pateikimo dėklai ir indai",
+    "equipmentIntro": "Papildomas serviravimo priemones galime įtraukti į didesnius HoReCa užsakymus — susisiekite dėl išsamesnės informacijos.",
+    "equipment": [
+      {
+        "title": "Mediniai pateikimo dėklai",
+        "body": "Rankų darbo mediniai stovai pusryčių linijoms ir popietės arbatos pateikimui, graviruoti „Ahmad Tea“ ženklu."
+      },
+      {
+        "title": "Stikliniai arbatinukai ir servizai",
+        "body": "Skaidrūs stikliniai arbatinukai biriai arbatai — elegantiškas pateikimas restoranų salėse."
+      },
+      {
+        "title": "Meniu apipavidalinimo medžiaga",
+        "body": "Firminiai arbatos meniu šablonai ir aprašymai, padedantys aiškiai pristatyti asortimentą svečiams."
+      }
+    ]
+  },
+  "home": {
+    "topBanner": {
+      "b2b": "B2B tiekimas viešbučiams ir restoranams",
+      "since": "UAB „Temus“ — įgaliotasis atstovas nuo 1995 m.",
+      "delivery": "24–48 val. pristatymas",
+      "warehouse": "Vilniaus sandėlis"
+    },
+    "hero": {
+      "badge": "Oficialus didmeninis tiekimas Lietuvoje",
+      "title": "Autentiška „Ahmad Tea London“ arbata jūsų viešbučiui, restoranui ar kavinei",
+      "lead": "UAB „Temus“ — oficialus gamintojo atstovas Lietuvoje. Tiekiame aukščiausios kokybės britišką arbatą, padedame sudaryti individualų arbatos meniu ir profesionaliai aptarnaujame HoReCa sektoriaus klientus.",
+      "cta": "Viešbučių kolekcija",
+      "warehouse": "Vietinis sandėlis Vilniuje",
+      "delivery": "Pristatymas per 24–48 val.",
+      "samples": "Nemokami degustaciniai rinkiniai",
+      "cardEyebrow": "HoReCa standartas",
+      "cardTitle": "Biri arbata, šilkinės piramidės ir rankų darbo mediniai serviravimo aksesuarai",
+      "cardBody": "Tiesioginis tiekimas iš „Ahmad Tea“ gamybos ir atrinktų arbatos ūkių.",
+      "since": "Lietuvoje"
+    },
+    "howItWorks": {
+      "eyebrow": "PAPRASTAS IR LANKSTUS BENDRADARBIAVIMAS",
+      "title": "Nuo arbatos pasirinkimo iki nepriekaištingo pateikimo svečiams",
+      "intro": "Procesas sukurtas taip, kad taupytų virtuvės šefų, pirkimų vadovų ir restoranų administratorių laiką.",
+      "steps": [
+        {
+          "title": "Pasirinkite arbatas",
+          "body": "Išsirinkite norimas arbatas iš plataus „Ahmad Tea“ asortimento ir pridėkite jas į „Mano pasirinkimą“ be jokių išankstinių įsipareigojimų.",
+          "tag": "Patogus prekių krepšelis"
+        },
+        {
+          "title": "Pateikite užklausą dėl kainos pasiūlymo",
+          "body": "Nurodykite preliminarų poreikį ar pageidaujamą formatą: birią arbatą, prabangias šilkines piramides ar higieniškai supakuotus klasikinius arbatos pakelius.",
+          "tag": "Individuali B2B kainodara"
+        },
+        {
+          "title": "Gaukite individualų pasiūlymą per 24 val.",
+          "body": "Parengsime individualų didmeninių kainų pasiūlymą pagal jūsų užsakymo apimtį ir išsiųsime nemokamą degustacinį rinkinį jūsų komandai.",
+          "tag": "Greitas vadybininko atsakymas"
+        }
+      ]
+    },
+    "why": {
+      "eyebrow": "PATIKIMA TIEKIMO GRANDINĖ",
+      "title": "Kodėl Lietuvos viešbučiai ir restoranai renkasi UAB „Temus“",
+      "intro": "Daugiau nei 25 metų profesionalaus bendradarbiavimo su Lietuvos svetingumo sektoriaus įmonėmis.",
+      "reasons": [
+        {
+          "title": "Vietinis sandėlis Lietuvoje",
+          "body": "Populiariausias „Ahmad Tea“ asortimentas nuolat laikomas sandėlyje Vilniuje, todėl atsargas galima greitai papildyti net intensyviausiu sezono metu."
+        },
+        {
+          "title": "Greitas ir patikimas pristatymas",
+          "body": "Užsakymus visoje Lietuvoje pristatome per 24–48 val. tiesiai į jūsų įstaigą."
+        },
+        {
+          "title": "Lankstūs užsakymų kiekiai",
+          "body": "Kiekvienam produktui taikomas minimalus užsakymo kiekis leidžia planuoti atsargas pagal realų jūsų įstaigos poreikį ir neįšaldyti perteklinių lėšų."
+        },
+        {
+          "title": "Nemokami rinkiniai ir mokymai",
+          "body": "Suteikiame arbatos pavyzdžių, galime pasiūlyti stilingų medinių pateikimo stendų ir apmokyti personalą tinkamai ruošti arbatą."
+        }
+      ]
+    },
+    "teaGrid": {
+      "eyebrow": "MEISTRIŠKAI SUDERINTI SKONIAI",
+      "title": "Aukščiausios kokybės arbatos HoReCa sektoriui",
+      "note": "Didmeninės kainos teikiamos pagal individualią užklausą",
+      "tiles": [
+        {
+          "badge": "Klasikinė",
+          "eyebrow": "Juodosios arbatos kolekcija",
+          "title": "Juodoji arbata",
+          "body": "Tradiciniai „English Breakfast“, Ceilono, Dardžilingo ir Asamo mišiniai. Sodrus aromatas, išraiškingas skonis ir gintaro spalvos užpilas."
+        },
+        {
+          "badge": "Gaivi ir aromatinga",
+          "eyebrow": "Žaliosios arbatos kolekcija",
+          "title": "Žalioji arbata",
+          "body": "Gryna žalioji arbata, „Jasmine Romance“ ir „Green Tea Mint“. Gaivus, švelniai gėliškas poskonis puikiai tinka poilsiui ir SPA ritualams."
+        },
+        {
+          "badge": "Be kofeino",
+          "eyebrow": "Žolelių ir vaisių užpilai",
+          "title": "Žolelių ir vaisių arbatos",
+          "body": "Natūralios ramunėlių, pipirmėčių, miško uogų ir citrinžolių kompozicijos be kofeino — vakarui, poilsiui ir gerai svečių savijautai."
+        },
+        {
+          "badge": "Britiškas paveldas",
+          "eyebrow": "„Earl Grey“ ir britiška klasika",
+          "title": "„Earl Grey“ ir britiška klasika",
+          "body": "Klasikinė „Earl Grey“ arbata su bergamočių aliejumi, „English Tea No. 1“ ir išskirtinės „Royal Tea“ serijos arbatos aukštesnės klasės viešbučiams."
+        }
+      ]
+    },
+    "segments": {
+      "hotelBadge": "Viešbučiams ir svečių namams",
+      "hotelTitle": "Viešbučiams ir boutique tipo apgyvendinimo vietoms",
+      "hotelBody": "Aukštos kokybės arbatos sprendimai svečių kambariams, pusryčių bufetams, konferencijų salėms ir verslo poilsio erdvėms. Galime pasiūlyti estetiškus medinius pateikimo dėklus, pritaikytus 4 ir 5 žvaigždučių viešbučių aptarnavimo standartams.",
+      "hotelBullets": [
+        "Atskirai hermetiškai supakuoti arbatos pakeliai kambariams",
+        "Pusryčių linijos stovai ir graviruotos medinės dėžutės",
+        "Didelio formato arbatos pakeliai banketams"
+      ],
+      "hotelCta": "Susipažinti su viešbučių sprendimais"
+    },
+    "about": {
+      "eyebrow": "OFICIALUS ATSTOVAS LIETUVOJE – UAB „TEMUS“",
+      "title": "Britiška kokybė ir šeimos verslo atsakomybė nuo 1995 m.",
+      "p1": "Nuo 1995 m. UAB „Temus“ atstovauja pasaulyje pripažintam „Ahmad Tea London“ prekės ženklui Lietuvoje. Vertiname asmeninį ryšį su kiekvienu partneriu — nuo jaukios senamiesčio kavinės iki didelių viešbučių ir kurortų.",
+      "p2": "Užtikriname tiesioginį tiekimą iš sertifikuotų gamyklų, produktų šviežumą ir profesionalią pagalbą formuojant arbatos kultūrą bei ruošiant personalą. Mūsų tikslas — kad kiekvienas arbatos puodelis jūsų įstaigoje taptų malonia patirtimi svečiui.",
+      "metrics": [
+        "Metų patirties Lietuvoje",
+        "HoReCa partnerių",
+        "Originalumo garantija"
+      ],
+      "cardTitle": "Tiesioginis tiekimas iš gamintojo",
+      "cardBody": "Produktai sandėliuojami Vilniuje kontroliuojamoje temperatūroje, kad būtų išsaugotas jų aromatas ir kokybė."
+    },
+    "tasting": {
+      "badge": "Nemokamas pavyzdžių rinkinys",
+      "title": "Išbandykite Ahmad Tea savo įstaigoje nemokamai",
+      "body": "Užpildykite trumpą formą ir atsiųsime jūsų viešbučiui ar restoranui pritaikytą arbatos pavyzdžių rinkinį bei individualų didmeninį kainoraštį.",
+      "fastTitle": "Greitas atsakymas",
+      "fastBody": "Atsakome ir degustacinį rinkinį išsiunčiame per 24 val.",
+      "noCommitTitle": "Be įsipareigojimų",
+      "noCommitBody": "Rinkinys skirtas jūsų komandai įvertinti ir skoniams palyginti.",
+      "name": "Vardas ir pavardė *",
+      "namePlaceholder": "pvz. Jonas Petraitis",
+      "company": "Įstaigos pavadinimas *",
+      "companyPlaceholder": "pvz. Grand Hotel Vilnius",
+      "venueType": "Įstaigos tipas",
+      "venues": {
+        "hotel": "Viešbutis",
+        "cafe": "Kavinė",
+        "restaurant": "Restoranas",
+        "other": "Kita / SPA"
+      },
+      "email": "El. paštas *",
+      "emailPlaceholder": "vardas@imone.lt",
+      "phone": "Telefonas *",
+      "notes": "Pageidaujamas formatas ar papildomi klausimai",
+      "notesPlaceholder": "pvz., ieškome birių arbatų pusryčių zonai ir šilkinių piramidžių à la carte meniu…",
+      "comingSoon": "Netrukus — ruošiame užklausos formą",
+      "comingSoonNote": "Kol kas susisiekite telefonu arba el. paštu, nurodytu puslapio viršuje."
+    }
+  }
+}

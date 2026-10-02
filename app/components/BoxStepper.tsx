@@ -1,6 +1,6 @@
 "use client";
 
-import { boxesLabel } from "@/lib/cart";
+import { useI18n } from "./I18nProvider";
 
 // Whole-box quantity selector: every step is exactly one box.
 export default function BoxStepper({
@@ -16,6 +16,7 @@ export default function BoxStepper({
   size?: "sm" | "md";
   disabled?: boolean;
 }) {
+  const { t, plural } = useI18n();
   const btn = `${size === "sm" ? "h-9 w-9" : "h-11 w-11"} flex shrink-0 items-center justify-center font-sans text-body-lg text-on-surface-variant transition-colors hover:text-primary disabled:cursor-not-allowed disabled:opacity-30 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-antique-gold-bright`;
 
   return (
@@ -28,7 +29,7 @@ export default function BoxStepper({
         type="button"
         onClick={() => onChange(value - 1)}
         disabled={disabled || value <= min}
-        aria-label="Viena dėžute mažiau"
+        aria-label={t.order.oneBoxLess}
         className={btn}
       >
         −
@@ -39,13 +40,13 @@ export default function BoxStepper({
           size === "sm" ? "text-body-sm" : "text-label-lg"
         }`}
       >
-        {boxesLabel(value)}
+        {plural(value, t.common.boxes)}
       </span>
       <button
         type="button"
         onClick={() => onChange(value + 1)}
         disabled={disabled}
-        aria-label="Viena dėžute daugiau"
+        aria-label={t.order.oneBoxMore}
         className={btn}
       >
         +

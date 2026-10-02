@@ -3,7 +3,8 @@
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { type CartLine } from "@/lib/cart";
-import { getCategory, positionsLabel, type CatalogCategory } from "@/lib/categories";
+import { getCategory, type CatalogCategory } from "@/lib/categories";
+import { useI18n } from "@/app/components/I18nProvider";
 import CategoryPicker from "./CategoryPicker";
 import CategoryBar from "./CategoryBar";
 import HotelProductCard from "./hotels/HotelProductCard";
@@ -32,10 +33,6 @@ export type ShopProduct = {
   in_stock?: boolean | null;
 };
 
-const TEA_TYPE_LABELS: Record<"loose" | "bags", string> = {
-  loose: "Loose Tea",
-  bags: "Tea Bags",
-};
 
 // A box holds `moq` units; boxes are the only unit customers order in.
 export function boxPrice(product: ShopProduct) {
@@ -69,7 +66,8 @@ export function perCupPrice(product: ShopProduct): number | null {
   return null;
 }
 
-type SortKey = "default" | "price-asc" | "price-desc" | "name";
+const SORT_KEYS = ["default", "price-asc", "price-desc", "name"] as const;
+type SortKey = (typeof SORT_KEYS)[number];
 
 // /shop opens on the category picker; ?kategorija=… shows the filtered catalog.
 export default function ShopClient({ products }: { products: ShopProduct[] }) {
@@ -92,6 +90,8 @@ function CatalogResults({
   initialSearch: string;
 }) {
   const products = useMemo(() => allProducts.filter(category.match), [allProducts, category]);
+  const { t, plural, f } = useI18n();
+  const categoryLabel = t.categories[category.slug].label;
   const [sort, setSort] = useState<SortKey>("default");
 
   const [search, setSearch] = useState(initialSearch);
@@ -166,13 +166,13 @@ function CatalogResults({
       {/* Search */}
       <div>
         <h3 className="mb-space-sm font-sans text-label-sm uppercase tracking-widest text-on-surface-variant">
-          Paieška
+          {t.catalog.filterSearch}
         </h3>
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Pavadinimas ar SKU…"
+          placeholder={t.catalog.filterSearchPlaceholder}
           className="w-full rounded-lg border border-outline-variant bg-surface-container-low px-3 py-2 font-sans text-body-md text-on-surface placeholder:text-on-surface-variant/60 transition focus:border-secondary focus:bg-surface focus:outline-none focus:ring-2 focus:ring-secondary/30"
         />
       </div>
@@ -181,7 +181,7 @@ function CatalogResults({
       {teaTypes.length > 0 && (
         <div>
           <h3 className="mb-space-sm font-sans text-label-sm uppercase tracking-widest text-on-surface-variant">
-            Arbatos Tipas
+            {t.catalog.filterTeaType}
           </h3>
           <ul className="space-y-2.5">
             {teaTypes.map((type) => (
@@ -194,7 +194,7 @@ function CatalogResults({
                     className="h-4 w-4 rounded border-outline-variant accent-primary"
                   />
                   <span className="font-sans text-body-md text-on-surface-variant transition group-hover:text-on-surface">
-                    {TEA_TYPE_LABELS[type]}
+                    {t.teaTypes[type]}
                   </span>
                 </label>
               </li>
@@ -207,7 +207,7 @@ function CatalogResults({
       {packageSizes.length > 0 && (
         <div>
           <h3 className="mb-space-sm font-sans text-label-sm uppercase tracking-widest text-on-surface-variant">
-            Pakuotės Dydis
+            {t.catalog.filterPackage}
           </h3>
           <ul className="space-y-2.5">
             {packageSizes.map((size) => (
@@ -233,7 +233,7 @@ function CatalogResults({
       {maxBox > 0 && (
         <div>
           <h3 className="mb-space-sm font-sans text-label-sm uppercase tracking-widest text-on-surface-variant">
-            Maks. Dėžutės Kaina
+            {t.catalog.filterMaxPrice}
           </h3>
           <input
             type="range"
@@ -246,7 +246,7 @@ function CatalogResults({
           />
           <div className="mt-2 flex items-center justify-between font-sans text-body-sm">
             <span className="text-on-surface-variant/60">€0</span>
-            <span className="font-semibold text-on-surface">iki €{maxPrice.toFixed(0)}</span>
+            <span className="font-semibold text-on-surface">{f(t.catalog.upTo, { amount: `€${maxPrice.toFixed(0)}` })}</span>
             <span className="text-on-surface-variant/60">€{maxBox.toFixed(0)}</span>
           </div>
         </div>
@@ -257,7 +257,7 @@ function CatalogResults({
           onClick={clearFilters}
           className="font-sans text-body-sm text-on-surface-variant/70 transition hover:text-on-surface"
         >
-          Išvalyti visus filtrus
+          {t.catalog.clearAllFilters}
         </button>
       )}
     </div>
@@ -274,7 +274,7 @@ function CatalogResults({
           className="flex items-center gap-2 rounded-lg border border-outline-variant bg-surface px-space-md py-space-sm font-sans text-body-md font-medium text-on-surface transition hover:bg-surface-container"
         >
           <span className="material-symbols-outlined text-[18px]" aria-hidden="true">tune</span>
-          Filtrai
+          {t.catalog.filters}
           {activeFiltersCount > 0 && (
             <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary-container font-sans text-[10px] font-bold text-parchment-deep">
               {activeFiltersCount}
@@ -299,31 +299,31 @@ function CatalogResults({
         <div className="min-w-0 flex-1">
           <div className="mb-4 hidden items-center justify-between lg:flex">
             <p className="font-sans text-[13px] text-on-surface-variant">
-              <span className="font-semibold text-primary">{category.label}</span> · {positionsLabel(sorted.length)}
+              <span className="font-semibold text-primary">{categoryLabel}</span> · {plural(sorted.length, t.common.positions)}
               {activeFiltersCount > 0 && (
                 <button
                   onClick={clearFilters}
                   className="ml-3 font-sans text-body-sm font-medium text-on-surface-variant/70 underline transition hover:text-on-surface"
                 >
-                  Išvalyti visus
+                  {t.catalog.clearAll}
                 </button>
               )}
             </p>
             <SortSelect sort={sort} onChange={setSort} />
           </div>
           <p className="mb-space-md font-sans text-[13px] text-on-surface-variant lg:hidden">
-            <span className="font-semibold text-primary">{category.label}</span> · {positionsLabel(sorted.length)}
+            <span className="font-semibold text-primary">{categoryLabel}</span> · {plural(sorted.length, t.common.positions)}
           </p>
 
           {sorted.length === 0 ? (
             <div className="flex flex-col items-center py-24 text-center text-on-surface-variant/60">
-              <p className="font-sans text-body-lg font-medium">Nė vienas produktas neatitinka filtrų.</p>
+              <p className="font-sans text-body-lg font-medium">{t.catalog.noResults}</p>
               {activeFiltersCount > 0 && (
                 <button
                   onClick={clearFilters}
                   className="mt-space-md font-sans text-body-md font-semibold text-on-surface underline"
                 >
-                  Išvalyti filtrus
+                  {t.catalog.clearFilters}
                 </button>
               )}
             </div>
@@ -348,16 +348,18 @@ export function SortSelect({
   sort: SortKey;
   onChange: (s: SortKey) => void;
 }) {
+  const { t } = useI18n();
   return (
     <select
       value={sort}
       onChange={(e) => onChange(e.target.value as SortKey)}
       className="rounded-lg border border-outline-variant bg-surface px-space-md py-space-sm font-sans text-body-md font-medium text-on-surface transition focus:outline-none focus:ring-2 focus:ring-secondary/30"
     >
-      <option value="default">Rikiuoti: Numatyta</option>
-      <option value="price-asc">Kaina: Nuo mažiausios</option>
-      <option value="price-desc">Kaina: Nuo didžiausios</option>
-      <option value="name">Pavadinimas: A → Z</option>
+      {SORT_KEYS.map((key) => (
+        <option key={key} value={key}>
+          {t.catalog.sort[key]}
+        </option>
+      ))}
     </select>
   );
 }

@@ -4,30 +4,34 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useRef, useEffect } from "react";
 import { useCart } from "../context/CartContext";
+import { useI18n } from "./I18nProvider";
+import { localizePath, locales, stripLocale, type Locale } from "@/lib/i18n";
 
 const NAV_LINKS = [
-  { label: "Arbatos", href: "/shop" },
-  { label: "Viešbučiams", href: "/shop/hotels" },
+  { key: "shop", href: "/shop" },
+  { key: "hotels", href: "/shop/hotels" },
   // Cafés & restaurants section hidden for now
   // { label: "Kavinėms ir Restoranams", href: "/shop" },
-  { label: "Apie mus", href: "/about" },
-  { label: "Kontaktai", href: "/contacts" },
-];
-
-const LANGUAGES = [
-  { code: "LT", label: "Lietuvių" },
-  { code: "EN", label: "English" },
-];
+  { key: "about", href: "/about" },
+  { key: "contacts", href: "/contacts" },
+] as const;
 
 export default function Navbar() {
+  const { t, lang, href, plural, f } = useI18n();
   const [langOpen, setLangOpen] = useState(false);
-  const [activeLang, setActiveLang] = useState("LT");
   const langRef = useRef<HTMLDivElement>(null);
 
   const { totalBoxes, openCart } = useCart();
 
+  // Same page in the other language; the query string (e.g. ?kategorija=…) is kept
+  const switchLanguage = (target: Locale) => {
+    setLangOpen(false);
+    if (target === lang) return;
+    window.location.assign(localizePath(stripLocale(window.location.pathname), target) + window.location.search);
+  };
+
   // Longest matching href wins, so /shop/hotels doesn't also highlight /shop
-  const pathname = usePathname();
+  const pathname = stripLocale(usePathname());
   const activeHref = NAV_LINKS.map((l) => l.href)
     .filter((href) => pathname === href || pathname.startsWith(`${href}/`))
     .sort((a, b) => b.length - a.length)[0];
@@ -49,7 +53,7 @@ export default function Navbar() {
         <div className="mx-auto flex h-8 max-w-[1440px] items-center justify-between px-margin-desktop">
           <div className="flex items-center gap-space-sm">
             <span className="h-1.5 w-1.5 rounded-full bg-antique-gold-bright" />
-            <span>Oficialus Ahmad Tea London distributorius Lietuvoje (HoReCa partneriams)</span>
+            <span>{t.nav.topBar}</span>
           </div>
           <div className="flex items-center gap-space-lg text-on-surface-variant/80">
             <a className="text-parchment-deep transition-colors hover:text-antique-gold-bright" href="tel:+37065116331">
@@ -65,12 +69,12 @@ export default function Navbar() {
 
       {/* Main nav */}
       <nav className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-margin-mobile lg:px-margin-desktop">
-        <Link href="/" className="flex shrink-0 flex-col">
+        <Link href={href("/")} className="flex shrink-0 flex-col">
           <span className="font-serif text-headline-sm text-primary font-bold tracking-tight">
             AHMAD TEA LONDON
           </span>
           <span className="font-sans text-label-sm uppercase tracking-wider text-secondary">
-            Oficialus Distributorius Lietuvoje (UAB Temus)
+            {t.nav.tagline}
           </span>
         </Link>
 
@@ -78,16 +82,16 @@ export default function Navbar() {
           {NAV_LINKS.map((link) => {
             const isActive = link.href === activeHref;
             return (
-              <li key={link.label}>
+              <li key={link.key}>
                 <Link
-                  href={link.href}
+                  href={href(link.href)}
                   aria-current={isActive ? "page" : undefined}
                   className={`relative py-space-xs font-sans text-label-lg uppercase transition-colors hover:text-primary after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:bg-secondary after:transition-transform ${isActive
                     ? "font-bold text-primary after:scale-x-100"
                     : "text-on-surface-variant after:scale-x-0 hover:after:scale-x-100"
                     }`}
                 >
-                  {link.label}
+                  {t.nav.links[link.key]}
                 </Link>
               </li>
             );
@@ -99,25 +103,24 @@ export default function Navbar() {
           <div ref={langRef} className="relative hidden sm:block">
             <button
               onClick={() => setLangOpen((o) => !o)}
-              aria-label="Select language"
+              aria-label={t.nav.selectLanguage}
+              aria-expanded={langOpen}
               className="flex items-center gap-space-xs rounded-lg px-space-sm py-space-xs font-sans text-label-lg font-bold text-on-surface-variant transition-colors hover:bg-surface-container"
             >
               <span className="material-symbols-outlined text-[18px]" aria-hidden="true">language</span>
-              <span>{activeLang}</span>
+              <span>{lang.toUpperCase()}</span>
             </button>
             {langOpen && (
               <div className="absolute right-0 mt-1 w-36 rounded-lg border border-outline-variant bg-surface py-1 shadow-lg">
-                {LANGUAGES.map((lang) => (
+                {locales.map((code) => (
                   <button
-                    key={lang.code}
-                    onClick={() => {
-                      setActiveLang(lang.code);
-                      setLangOpen(false);
-                    }}
-                    className={`w-full px-3 py-2 text-left font-sans text-body-md transition-colors hover:bg-surface-container ${activeLang === lang.code ? "font-bold text-primary" : "text-on-surface-variant"
+                    key={code}
+                    lang={code}
+                    onClick={() => switchLanguage(code)}
+                    className={`w-full px-3 py-2 text-left font-sans text-body-md transition-colors hover:bg-surface-container ${lang === code ? "font-bold text-primary" : "text-on-surface-variant"
                       }`}
                   >
-                    {lang.label}
+                    {t.nav.languages[code]}
                   </button>
                 ))}
               </div>
@@ -127,7 +130,7 @@ export default function Navbar() {
           {/* Mano pasirinkimas (cart) */}
           <button
             onClick={openCart}
-            aria-label={`Mano pasirinkimas, ${totalBoxes} dėž.`}
+            aria-label={f(t.nav.cartAria, { boxes: plural(totalBoxes, t.common.boxes) })}
             className="flex items-center gap-space-xs rounded-lg bg-surface-container px-space-md py-space-sm text-on-surface transition-colors hover:bg-surface-container-high"
           >
             {/* <span className="font-sans text-label-lg font-semibold hidden sm:inline">Mano pasirinkimas</span> */}
@@ -141,10 +144,10 @@ export default function Navbar() {
 
           {/* Shop CTA */}
           <Link
-            href="/shop"
+            href={href("/shop")}
             className="rounded-lg border border-secondary bg-primary-container px-space-md py-space-sm font-sans text-label-lg uppercase tracking-wider text-parchment-deep shadow-[0_0_12px_rgba(197,160,89,0.2)] transition-all hover:bg-racing-green-dark"
           >
-            Katalogas
+            {t.nav.catalog}
           </Link>
         </div>
       </nav>

@@ -1,11 +1,15 @@
 import Link from "next/link";
+import { getI18n } from "@/app/[lang]/dictionaries";
+import type { Locale } from "@/lib/i18n";
 
 // Cafés don't have a dedicated catalog route yet — points at the general
 // catalog until a café-specific Stitch export arrives.
 // Café segment hidden for now; restore this and the card below together.
 // const CAFE_HREF = "/shop";
 
-export default function SegmentPortals() {
+export default async function SegmentPortals({ lang }: { lang: Locale }) {
+  const { t, href } = await getI18n(lang);
+  const c = t.home.segments;
   return (
     <section className="w-full bg-surface px-margin-mobile py-space-xl lg:px-margin-desktop">
       {/* lg:grid-cols-2 while the café card below is visible */}
@@ -16,36 +20,30 @@ export default function SegmentPortals() {
             <div className="inline-flex w-fit items-center gap-2 rounded-full bg-surface/10 px-3 py-1">
               <span className="material-symbols-outlined text-antique-gold-bright text-[18px]" aria-hidden="true">hotel</span>
               <span className="font-sans text-label-sm uppercase tracking-widest text-parchment-deep">
-                Viešbučiams ir Svečių Namams
+                {c.hotelBadge}
               </span>
             </div>
             <h3 className="font-serif text-headline-lg-mobile leading-snug text-parchment-deep lg:text-headline-lg">
-              Hotels &amp; Boutique Stays
+              {c.hotelTitle}
             </h3>
             <p className="max-w-lg font-sans text-body-lg leading-relaxed text-parchment-deep/80">
-              Prabangūs arbatos sprendimai numeriams, pusryčių bufetams, konferencijų salėms ir Executive Lounge erdvėms. Įskaičiuoti estetiški mediniai prezentaciniai dėklai, atitinkantys tarptautinius 4 ir 5 žvaigždučių svetingumo standartus.
+              {c.hotelBody}
             </p>
             <ul className="flex flex-col gap-space-xs pt-space-xs font-sans text-body-md text-parchment-deep/90">
-              <li className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-antique-gold-bright text-[18px]" aria-hidden="true">check_circle</span>
-                Atskirai hermetiškai pakuoti vokeliai kambariams
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-antique-gold-bright text-[18px]" aria-hidden="true">check_circle</span>
-                Pusryčių linijos stoveliai ir graviruotos medinės dėžutės
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-antique-gold-bright text-[18px]" aria-hidden="true">check_circle</span>
-                Specialūs didelio tūrio arbatos pakeliai banketams
-              </li>
+              {c.hotelBullets.map((bullet) => (
+                <li key={bullet} className="flex items-center gap-2">
+                  <span className="material-symbols-outlined text-antique-gold-bright text-[18px]" aria-hidden="true">check_circle</span>
+                  {bullet}
+                </li>
+              ))}
             </ul>
           </div>
           <div className="relative z-10 pt-space-lg">
             <Link
-              href="/shop/hotels"
+              href={href("/shop/hotels")}
               className="inline-flex items-center gap-space-xs rounded-lg bg-parchment-deep px-space-lg py-space-sm font-sans text-label-lg uppercase tracking-wider text-charcoal-ink shadow-md transition-all hover:bg-surface"
             >
-              <span>Susipažinti su viešbučių sprendimais</span>
+              <span>{c.hotelCta}</span>
               <span className="material-symbols-outlined text-[18px]" aria-hidden="true">arrow_forward</span>
             </Link>
           </div>

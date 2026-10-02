@@ -1,26 +1,15 @@
-import { useCart } from "../../context/CartContext";
+"use client";
+
+import { useCart } from "@/app/context/CartContext";
+import { useI18n } from "@/app/components/I18nProvider";
 import type { TeaCategory } from "../ShopClient";
 
 export type HotelSortKey = "default" | "price-asc" | "price-desc" | "cup-asc" | "caffeine" | "name";
 
-// Key order is also the chip order in the filter bar.
-export const CATEGORY_LABELS: Record<TeaCategory, string> = {
-  black: "Juodoji",
-  green: "Žalioji",
-  white_oolong: "Baltoji / Oolong",
-  herbal: "Žolelių",
-  fruit: "Vaisių",
-};
-const CATEGORY_ORDER = Object.keys(CATEGORY_LABELS) as TeaCategory[];
+// Chip order in the filter bar; labels live in the dictionaries under teaCategories
+const CATEGORY_ORDER: TeaCategory[] = ["black", "green", "white_oolong", "herbal", "fruit"];
 
-const SORT_OPTIONS: { value: HotelSortKey; label: string }[] = [
-  { value: "default", label: "Numatyta tvarka" },
-  { value: "price-asc", label: "Kaina: nuo mažiausios" },
-  { value: "price-desc", label: "Kaina: nuo didžiausios" },
-  { value: "cup-asc", label: "Kaina puodeliui" },
-  { value: "caffeine", label: "Kofeino intensyvumas" },
-  { value: "name", label: "Pavadinimas A–Ž" },
-];
+const SORT_KEYS: HotelSortKey[] = ["default", "price-asc", "price-desc", "cup-asc", "caffeine", "name"];
 
 // Layout follows new_design/filterHotelCards.
 export default function FilterBar({
@@ -51,6 +40,7 @@ export default function FilterBar({
   onCaffeineChange: (v: "all" | "high" | "none") => void;
 }) {
   const { totalBoxes, openCart } = useCart();
+  const { t, plural, f } = useI18n();
 
   // "Be kofeino" is shown as a tea type, but it's still the caffeine filter
   // underneath, so it and the tea categories are mutually exclusive here.
@@ -70,7 +60,7 @@ export default function FilterBar({
         {/* Search · sort · order */}
         <div className="grid grid-cols-1 items-center gap-3 md:max-[1249px]:grid-cols-[1fr_auto] min-[1250px]:grid-cols-[minmax(320px,1fr)_auto_auto]">
           <label className="relative flex h-11 items-center rounded-[10px] border border-outline-variant/70 bg-surface-container-lowest focus-within:ring-2 focus-within:ring-secondary/40">
-            <span className="sr-only">Paieška</span>
+            <span className="sr-only">{t.hotels.searchLabel}</span>
             <span
               className="material-symbols-outlined pointer-events-none absolute left-3.5 text-[20px] text-on-surface-variant"
               aria-hidden="true"
@@ -81,14 +71,14 @@ export default function FilterBar({
               type="search"
               value={search}
               onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Ieškoti pagal pavadinimą, SKU ar skonį…"
+              placeholder={t.hotels.searchPlaceholder}
               className="h-full w-full rounded-[10px] bg-transparent pl-11 pr-3.5 font-sans text-[14px] text-charcoal-ink outline-none placeholder:text-outline"
             />
           </label>
 
           <label className="flex flex-col gap-1.5 md:flex-row md:items-center md:gap-2.5 md:max-[1249px]:col-start-2 md:max-[1249px]:row-start-1">
             <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.08em] text-charcoal-ink">
-              Rikiuoti:
+              {t.hotels.sortLabel}
             </span>
             <span className="relative">
               <select
@@ -96,9 +86,9 @@ export default function FilterBar({
                 onChange={(e) => onSortChange(e.target.value as HotelSortKey)}
                 className="h-11 w-full cursor-pointer appearance-none rounded-[10px] border border-outline-variant/70 bg-surface-container-lowest pl-3.5 pr-10 font-sans text-[14px] text-charcoal-ink outline-none focus:ring-2 focus:ring-secondary/40 md:min-w-52"
               >
-                {SORT_OPTIONS.map((o) => (
-                  <option key={o.value} value={o.value}>
-                    {o.label}
+                {SORT_KEYS.map((key) => (
+                  <option key={key} value={key}>
+                    {t.hotels.sort[key]}
                   </option>
                 ))}
               </select>
@@ -114,13 +104,13 @@ export default function FilterBar({
           <button
             type="button"
             onClick={openCart}
-            aria-label={`Užsakymas, ${totalBoxes} dėž.`}
+            aria-label={f(t.hotels.orderAria, { boxes: plural(totalBoxes, t.common.boxes) })}
             className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-[10px] border border-antique-gold-muted/45 bg-primary-container px-4 font-sans text-[14px] font-bold tracking-[0.03em] text-white shadow-[0_5px_12px_rgba(7,57,40,0.12)] transition-[background-color,transform] duration-150 hover:bg-racing-green-dark active:translate-y-px md:w-auto md:max-[1249px]:col-start-2"
           >
             <span className="material-symbols-outlined text-[17px] text-antique-gold-muted" aria-hidden="true">
               shopping_cart
             </span>
-            <span>Užsakymas</span>
+            <span>{t.hotels.order}</span>
             <span className="inline-flex h-[22px] min-w-[22px] items-center justify-center rounded-[999px] bg-antique-gold-bright px-1.5 text-[11px] font-extrabold text-charcoal-ink">
               {totalBoxes}
             </span>
@@ -131,25 +121,25 @@ export default function FilterBar({
         {/* From 1400px the minimums keep every group's chips on one line (the
             shortest toolbar); between 1250–1399px chips may wrap within a column. */}
         <div className="mt-3 grid grid-cols-1 gap-3 min-[1250px]:items-center min-[1250px]:gap-4 min-[1250px]:max-[1399px]:grid-cols-[minmax(0,1.2fr)_auto_minmax(0,1.55fr)_auto_minmax(150px,0.6fr)] min-[1400px]:grid-cols-[minmax(430px,1.2fr)_auto_minmax(550px,1.55fr)_auto_minmax(160px,0.6fr)]">
-          <FilterGroup icon="eco" label="Tipas">
+          <FilterGroup icon="eco" label={t.hotels.groupType}>
             <Chip active={activeCategory === "all" && !caffeineFree} onClick={() => pickCategory("all")}>
-              Visi
+              {t.hotels.all}
             </Chip>
             {CATEGORY_ORDER.filter((cat) => categories.includes(cat)).map((cat) => (
               <Chip key={cat} active={activeCategory === cat && !caffeineFree} onClick={() => pickCategory(cat)}>
-                {CATEGORY_LABELS[cat]}
+                {t.teaCategories[cat]}
               </Chip>
             ))}
             <Chip active={caffeineFree} onClick={pickCaffeineFree}>
-              Be kofeino
+              {t.hotels.caffeineFree}
             </Chip>
           </FilterGroup>
 
           <Divider />
 
-          <FilterGroup icon="inventory_2" label="Pakuotė">
+          <FilterGroup icon="inventory_2" label={t.hotels.groupPackage}>
             <Chip active={activeSize === "all"} onClick={() => onSizeChange("all")}>
-              Visos
+              {t.hotels.allSizes}
             </Chip>
             {packageSizes.map((size) => (
               <Chip key={size} active={activeSize === size} onClick={() => onSizeChange(size)}>
@@ -160,12 +150,12 @@ export default function FilterBar({
 
           <Divider />
 
-          <FilterGroup icon="bolt" label="Kofeinas">
+          <FilterGroup icon="bolt" label={t.hotels.groupCaffeine}>
             <Chip active={caffeineFilter === "all"} onClick={() => onCaffeineChange("all")}>
-              Visi lygiai
+              {t.hotels.allLevels}
             </Chip>
             <Chip active={caffeineFilter === "high"} onClick={() => onCaffeineChange("high")}>
-              Didelis
+              {t.hotels.highCaffeine}
             </Chip>
           </FilterGroup>
         </div>

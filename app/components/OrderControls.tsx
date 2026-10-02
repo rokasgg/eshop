@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import BoxStepper from "./BoxStepper";
 import { useCart } from "../context/CartContext";
-import { boxesLabel, clampBoxes, formatEur, lineTotal, totalUnits, type CartLine } from "@/lib/cart";
+import { clampBoxes, formatEur, lineTotal, totalUnits, type CartLine } from "@/lib/cart";
+import { useI18n } from "./I18nProvider";
 
 export function useBoxesInCart(id: string) {
   const { items } = useCart();
@@ -15,8 +16,9 @@ export function useBoxesInCart(id: string) {
 // show different quantities.
 export function useBoxOrder(
   line: Omit<CartLine, "boxQuantity">,
-  { available = true, idleLabel = "Pridėti" }: { available?: boolean; idleLabel?: string } = {}
+  { available = true, idleLabel }: { available?: boolean; idleLabel?: string } = {}
 ) {
+  const { t } = useI18n();
   const { addBoxes, setBoxQuantity } = useCart();
   const inCart = useBoxesInCart(line.id);
   const isInOrder = inCart > 0;
@@ -40,14 +42,14 @@ export function useBoxOrder(
   };
 
   const label = !available
-    ? "Šiuo metu neturime"
+    ? t.common.outOfStock
     : confirmation === "added"
-      ? "Pridėta į užsakymą"
+      ? t.order.added
       : confirmation === "updated"
-        ? "Kiekis atnaujintas"
+        ? t.order.updated
         : isInOrder
-          ? "Atnaujinti kiekį"
-          : idleLabel;
+          ? t.order.update
+          : (idleLabel ?? t.order.add);
 
   const icon = !available ? "block" : confirmation ? "check" : isInOrder ? "sync" : "add_shopping_cart";
 
@@ -68,6 +70,7 @@ export function useBoxOrder(
 }
 
 export function OrderStatus({ order, compact = false }: { order: ReturnType<typeof useBoxOrder>; compact?: boolean }) {
+  const { t, plural, f } = useI18n();
   if (!order.isInOrder) return null;
   return (
     <p
@@ -80,8 +83,11 @@ export function OrderStatus({ order, compact = false }: { order: ReturnType<type
         check_circle
       </span>
       <span className={compact ? "truncate" : undefined}>
-        Jūsų užsakyme: {boxesLabel(order.inCart)} · {totalUnits(order.orderedLine)} vnt. ·{" "}
-        {formatEur(lineTotal(order.orderedLine))}
+        {f(t.order.inOrderStatus, {
+          boxes: plural(order.inCart, t.common.boxes),
+          units: f(t.common.units, { n: totalUnits(order.orderedLine) }),
+          total: formatEur(lineTotal(order.orderedLine)),
+        })}
       </span>
     </p>
   );

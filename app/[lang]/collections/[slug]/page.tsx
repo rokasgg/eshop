@@ -2,6 +2,7 @@ import { client } from "@/sanity/lib/client";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { localizePath, hasLocale } from "@/lib/i18n";
 
 const COLLECTION_QUERY = `*[_type == "collection" && slug.current == $slug][0]{
   title,
@@ -36,9 +37,10 @@ type CollectionData = {
 export default async function CollectionPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ lang: string; slug: string }>;
 }) {
-  const { slug } = await params;
+  const { lang, slug } = await params;
+  if (!hasLocale(lang)) notFound();
 
   let data: CollectionData | null = null;
   try {
@@ -122,7 +124,7 @@ export default async function CollectionPage({
         ) : (
           <div className="py-20 text-center text-stone-400">
             <p className="text-lg">No teas in this collection yet.</p>
-            <Link href="/shop" className="mt-4 inline-block text-sm font-semibold text-stone-900 underline">
+            <Link href={localizePath("/shop", lang)} className="mt-4 inline-block text-sm font-semibold text-stone-900 underline">
               Browse all catalog
             </Link>
           </div>

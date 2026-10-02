@@ -1,0 +1,424 @@
+{
+  "meta": {
+    "title": "Ahmad Tea London | Official Distributor in Lithuania",
+    "description": "The official Ahmad Tea London distributor in Lithuania — wholesale tea for hotels, restaurants and cafés."
+  },
+  "common": {
+    "boxes": {
+      "one": "{n} box",
+      "few": "{n} boxes",
+      "other": "{n} boxes"
+    },
+    "boxesWord": {
+      "one": "box",
+      "few": "boxes",
+      "other": "boxes"
+    },
+    "positions": {
+      "one": "{n} product",
+      "few": "{n} products",
+      "other": "{n} products"
+    },
+    "products": {
+      "one": "{n} product",
+      "few": "{n} products",
+      "other": "{n} products"
+    },
+    "categoriesCount": {
+      "one": "{n} category",
+      "few": "{n} categories",
+      "other": "{n} categories"
+    },
+    "units": "{n} units",
+    "unitsInBox": "{n} units per box",
+    "perBox": "/ box",
+    "perCup": "/ cup",
+    "boxEquals": "1 box = {n} units",
+    "minimumOneBox": "Minimum: 1 box",
+    "minOneBoxShort": "Min. 1 box",
+    "outOfStock": "Currently unavailable",
+    "brand": "Ahmad Tea London"
+  },
+  "nav": {
+    "links": {
+      "shop": "Teas",
+      "hotels": "For Hotels",
+      "about": "About",
+      "contacts": "Contact"
+    },
+    "topBar": "Official Ahmad Tea London distributor in Lithuania (for HoReCa partners)",
+    "tagline": "Official Distributor in Lithuania (UAB Temus)",
+    "catalog": "Catalogue",
+    "cartAria": "My selection, {boxes}",
+    "selectLanguage": "Select language",
+    "languages": {
+      "lt": "Lietuvių",
+      "en": "English"
+    }
+  },
+  "footer": {
+    "tagline": "UAB Temus has been the official Ahmad Tea distributor in Lithuania since 1995, supplying premium British tea to hotels, restaurants and cafés across the country.",
+    "copyright": "© 1995–{year} UAB Temus. Official Ahmad Tea London distributor in Lithuania. All rights reserved.",
+    "navigation": "Navigation",
+    "contacts": "Contact",
+    "city": "Vilnius, Lithuania"
+  },
+  "order": {
+    "add": "Add",
+    "toOrder": "Add to order",
+    "added": "Added to order",
+    "addedShort": "Added",
+    "updated": "Quantity updated",
+    "update": "Update quantity",
+    "inOrderStatus": "In your order: {boxes} · {units} · {total}",
+    "inOrderBadge": "In order · {boxes}",
+    "decrease": "Decrease quantity",
+    "increase": "Increase quantity",
+    "oneBoxLess": "One box less",
+    "oneBoxMore": "One box more"
+  },
+  "cart": {
+    "title": "Your order",
+    "titleWithCount": "Your order ({boxes})",
+    "deliveryTitle": "Delivery Details",
+    "confirmedTitle": "Order Confirmed",
+    "close": "Close",
+    "empty": "Your order is empty",
+    "lineUnits": "{perBox} units per box · {total} units in total",
+    "remove": "Remove",
+    "subtotal": "Subtotal",
+    "continue": "Continue →",
+    "back": "← Back",
+    "submit": "Place Order",
+    "submitting": "Placing order…",
+    "minOrderEur": "Minimum order value: {amount}",
+    "minOrderBoxes": "Minimum order: {boxes}"
+  },
+  "checkout": {
+    "name": "Full name",
+    "namePlaceholder": "John Smith",
+    "email": "Email",
+    "emailPlaceholder": "john@company.com",
+    "phone": "Phone",
+    "phonePlaceholder": "+370 600 00000",
+    "address": "Delivery Address",
+    "addressPlaceholder": "Street, city, postcode",
+    "notes": "Notes (optional)",
+    "notesPlaceholder": "Any special requests?",
+    "summary": "Order Summary",
+    "summaryUnits": "({n} units)",
+    "total": "Total",
+    "required": "Required",
+    "invalidEmail": "Invalid email address",
+    "error": "Something went wrong. Please try again.",
+    "successTitle": "Order placed!",
+    "successThanks": "Thank you{name}! We'll be in touch shortly to confirm delivery.",
+    "orderId": "Order ID: {id}",
+    "continueShopping": "Continue Browsing"
+  },
+  "categories": {
+    "juodoji": {
+      "label": "Black Tea",
+      "eyebrow": "Classic Blends",
+      "description": "English Breakfast, Earl Grey, Ceylon and Assam classics"
+    },
+    "zalioji": {
+      "label": "Green Tea",
+      "eyebrow": "Fresh & Aromatic",
+      "description": "Pure green tea, with jasmine and with mint"
+    },
+    "vaisiu": {
+      "label": "Fruit Tea",
+      "eyebrow": "Fruit Infusions",
+      "description": "Berry and fruit blends with a rich flavour"
+    },
+    "zoleliu": {
+      "label": "Herbal Tea",
+      "eyebrow": "Wellness & Natural",
+      "description": "Natural herbal blends for wellbeing"
+    },
+    "be-kofeino": {
+      "label": "Caffeine-Free",
+      "eyebrow": "Evening & Spa",
+      "description": "For evenings, the spa and guest relaxation"
+    },
+    "visos": {
+      "label": "All Teas",
+      "eyebrow": "Full Catalogue",
+      "description": "The complete range in one place"
+    }
+  },
+  "teaCategories": {
+    "black": "Black",
+    "green": "Green",
+    "white_oolong": "White / Oolong",
+    "herbal": "Herbal",
+    "fruit": "Fruit"
+  },
+  "teaTypes": {
+    "loose": "Loose leaf",
+    "bags": "Tea bags"
+  },
+  "occasions": {
+    "all": {
+      "label": "All Scenarios",
+      "hint": "The full professional collection"
+    },
+    "breakfast": {
+      "label": "Breakfast Buffet",
+      "hint": "Rich, invigorating teas"
+    },
+    "afternoon": {
+      "label": "Afternoon Tea",
+      "hint": "Bergamot and floral notes"
+    },
+    "rooms": {
+      "label": "Room Service",
+      "hint": "Individual, hygienic formats"
+    },
+    "spa": {
+      "label": "Spa & Relaxation",
+      "hint": "Herbal and caffeine-free teas"
+    }
+  },
+  "card": {
+    "packaging": "Pack",
+    "inBox": "Per box",
+    "strengthTitle": "Strength {n}/5",
+    "strengthAria": "Strength {n} of 5"
+  },
+  "catalog": {
+    "eyebrow": "HoReCa Wholesale",
+    "title": "Ahmad Tea Catalogue",
+    "subtitle": "Wholesale tea for cafés, restaurants and hotels across Lithuania",
+    "pickTitle": "Choose a tea category",
+    "quickSearchLabel": "Know what you're looking for?",
+    "quickSearchPlaceholder": "Search by name or SKU…",
+    "search": "Search",
+    "allCategories": "All categories",
+    "categoriesAria": "Tea categories",
+    "filterSearch": "Search",
+    "filterSearchPlaceholder": "Name or SKU…",
+    "filterTeaType": "Tea Type",
+    "filterPackage": "Pack Size",
+    "filterMaxPrice": "Max. Box Price",
+    "upTo": "up to {amount}",
+    "clearAllFilters": "Clear all filters",
+    "clearAll": "Clear all",
+    "filters": "Filters",
+    "noResults": "No products match these filters.",
+    "clearFilters": "Clear filters",
+    "sort": {
+      "default": "Sort: Default",
+      "price-asc": "Price: Low to high",
+      "price-desc": "Price: High to low",
+      "name": "Name: A → Z"
+    }
+  },
+  "product": {
+    "back": "← Back to catalogue",
+    "minOrder": "Minimum order",
+    "minOrderValue": "1 box ({n} units)",
+    "pricePerUnit": "({amount} / unit)"
+  },
+  "hotels": {
+    "eyebrow": "Ahmad Tea London · HoReCa Collection",
+    "title": "Tea Collection for Hotels",
+    "lead": "A curated Ahmad Tea range for hotel breakfasts, Afternoon Tea, Room Service, the spa and guest rooms.",
+    "sub": "Sensory profiles and professional pack formats make it quick to choose the right teas for every service scenario.",
+    "statCatalog": "Catalogue",
+    "statCatalogNote": "In stock in Vilnius",
+    "statDelivery": "B2B delivery",
+    "statDeliveryValue": "24–48 h",
+    "statDeliveryNote": "Across Lithuania",
+    "scenariosEyebrow": "Choose a service scenario",
+    "scenariosTitle": "Hotel & Restaurant Scenarios",
+    "searchLabel": "Search",
+    "searchPlaceholder": "Search by name, SKU or flavour…",
+    "sortLabel": "Sort:",
+    "sort": {
+      "default": "Default order",
+      "price-asc": "Price: low to high",
+      "price-desc": "Price: high to low",
+      "cup-asc": "Price per cup",
+      "caffeine": "Caffeine strength",
+      "name": "Name A–Z"
+    },
+    "order": "Order",
+    "orderAria": "Order, {boxes}",
+    "groupType": "Type",
+    "groupPackage": "Pack",
+    "groupCaffeine": "Caffeine",
+    "all": "All",
+    "allSizes": "All",
+    "caffeineFree": "Caffeine-free",
+    "allLevels": "All levels",
+    "highCaffeine": "High",
+    "noResults": "No products match these filters.",
+    "equipmentEyebrow": "HoReCa Serving Equipment",
+    "equipmentTitle": "Wooden Presentation Boxes & Teaware",
+    "equipmentIntro": "Additional serving equipment included with larger HoReCa orders — contact us for details.",
+    "equipment": [
+      {
+        "title": "Wooden Presentation Boxes",
+        "body": "Handcrafted wooden stands for breakfast lines and Afternoon Tea service, engraved with the Ahmad Tea logo."
+      },
+      {
+        "title": "Glass Teapots & Tea Sets",
+        "body": "Clear glass teapots for loose-leaf tea service — an elegant presentation in restaurant dining rooms."
+      },
+      {
+        "title": "Menu Presentation Materials",
+        "body": "Branded tea menu templates and descriptions that help present the range to your guests."
+      }
+    ]
+  },
+  "home": {
+    "topBanner": {
+      "b2b": "B2B Supply for Hotels & Restaurants",
+      "since": "UAB „Temus“ — Authorised distributor since 1995",
+      "delivery": "24–48 h delivery",
+      "warehouse": "Vilnius warehouse"
+    },
+    "hero": {
+      "badge": "Official Wholesale Supply in Lithuania",
+      "title": "Authentic Ahmad Tea London for your hotel and café",
+      "lead": "UAB „Temus“, the manufacturer's official representative in Lithuania. We supply the finest British tea tradition, tailored tea menus and professional service for the HoReCa sector.",
+      "cta": "Hotel collection",
+      "warehouse": "Local warehouse in Vilnius",
+      "delivery": "Delivery within 24–48 h",
+      "samples": "Free tasting kits",
+      "cardEyebrow": "HoReCa Standard",
+      "cardTitle": "Loose-leaf teas, silk pyramids and handcrafted wooden serveware",
+      "cardBody": "Supplied directly from tea gardens selected by London's master blenders.",
+      "since": "In Lithuania"
+    },
+    "howItWorks": {
+      "eyebrow": "SIMPLE, FLEXIBLE PARTNERSHIP",
+      "title": "From choosing the tea to flawless guest service",
+      "intro": "Designed to save time for chefs, procurement managers and restaurant managers.",
+      "steps": [
+        {
+          "title": "Choose your teas",
+          "body": "Select teas from the wide Ahmad Tea range and add them to “My selection” with no upfront commitment.",
+          "tag": "Easy-to-use order basket"
+        },
+        {
+          "title": "Request a quote",
+          "body": "Tell us your estimated volumes or preferred format: loose-leaf tea, premium silk pyramids or hygienic classic envelopes.",
+          "tag": "Individual B2B pricing"
+        },
+        {
+          "title": "Get a personal offer within 24 h",
+          "body": "We'll prepare an individual wholesale price list based on your volumes and send a free tasting kit to your team.",
+          "tag": "Fast account manager response"
+        }
+      ]
+    },
+    "why": {
+      "eyebrow": "A RELIABLE SUPPLY CHAIN",
+      "title": "Why Lithuanian hotels and restaurants choose UAB „Temus“",
+      "intro": "Over 25 years of working with the country's leading hospitality businesses.",
+      "reasons": [
+        {
+          "title": "Local warehouse in Lithuania",
+          "body": "The most popular Ahmad Tea range is always in stock in our Vilnius warehouse, so you never run short — even in the busiest season."
+        },
+        {
+          "title": "Fast, reliable delivery",
+          "body": "Orders delivered across Lithuania within 24–48 hours, straight to your storeroom or kitchen with no intermediary delays."
+        },
+        {
+          "title": "Flexible order quantities",
+          "body": "A tailored minimum order per product lets you order exactly what your venue needs, without tying up cash in stock."
+        },
+        {
+          "title": "Free kits and training",
+          "body": "We provide tea samples and elegant wooden presentation stands, and train your staff in the art of proper brewing."
+        }
+      ]
+    },
+    "teaGrid": {
+      "eyebrow": "EXPERTLY BALANCED FLAVOURS",
+      "title": "Premium tea for HoReCa",
+      "note": "Wholesale prices available on individual request",
+      "tiles": [
+        {
+          "badge": "Classic",
+          "eyebrow": "Black Tea Collection",
+          "title": "Black Tea",
+          "body": "Traditional English Breakfast, Ceylon, Darjeeling and Assam blends. A rich, aromatic body and an amber colour."
+        },
+        {
+          "badge": "Fresh & Aromatic",
+          "eyebrow": "Green Tea Selection",
+          "title": "Green Tea",
+          "body": "Pure green tea, Jasmine Romance and Green Tea Mint. A fresh, gently floral finish for guest relaxation and spa rituals."
+        },
+        {
+          "badge": "Caffeine-Free",
+          "eyebrow": "Herbal & Fruit Infusions",
+          "title": "Herbal & Fruit Teas",
+          "body": "Natural chamomile, peppermint, forest berry and lemongrass blends, caffeine-free for evening relaxation and guest wellbeing."
+        },
+        {
+          "badge": "British Heritage",
+          "eyebrow": "Earl Grey & Heritage",
+          "title": "Earl Grey & British Classics",
+          "body": "The legendary Earl Grey with genuine bergamot oil, English Tea No. 1 and the exclusive Royal Tea range for prestigious hotels."
+        }
+      ]
+    },
+    "segments": {
+      "hotelBadge": "For Hotels & Guesthouses",
+      "hotelTitle": "Hotels & Boutique Stays",
+      "hotelBody": "Premium tea solutions for guest rooms, breakfast buffets, conference rooms and executive lounges. Includes elegant wooden presentation boxes that meet international 4- and 5-star hospitality standards.",
+      "hotelBullets": [
+        "Individually sealed envelopes for guest rooms",
+        "Breakfast-line stands and engraved wooden boxes",
+        "Large-format tea bags for banquets"
+      ],
+      "hotelCta": "Explore hotel solutions"
+    },
+    "about": {
+      "eyebrow": "OFFICIAL DISTRIBUTOR IN LITHUANIA – UAB „TEMUS“",
+      "title": "British quality and family-business responsibility since 1995",
+      "p1": "For more than two decades, UAB „Temus“ has represented the world-renowned Ahmad Tea London brand in Lithuania. We value a personal relationship with every partner — from a cosy Old Town café to the largest resort hotel chains in the Baltics.",
+      "p2": "We guarantee direct supply from certified factories, impeccable product freshness and professional tea-culture support for your staff. Our goal is to make every cup of tea in your venue a flawless experience for your guests.",
+      "metrics": [
+        "Years in Lithuania",
+        "HoReCa partners",
+        "Guaranteed authentic"
+      ],
+      "cardTitle": "Direct from the factory",
+      "cardBody": "Stored at a controlled temperature in Vilnius to preserve essential oils and aroma."
+    },
+    "tasting": {
+      "badge": "Free Sample Kit",
+      "title": "Try Ahmad Tea in your venue, free of charge",
+      "body": "Fill in a short form and we'll send a tea sample kit tailored to your hotel or restaurant, together with an individual wholesale price list.",
+      "fastTitle": "Fast response",
+      "fastBody": "We reply and dispatch the tasting kit within 24 h.",
+      "noCommitTitle": "No commitment",
+      "noCommitBody": "The kit is for your team to evaluate and compare flavours.",
+      "name": "Full name *",
+      "namePlaceholder": "e.g. John Smith",
+      "company": "Venue name *",
+      "companyPlaceholder": "e.g. Grand Hotel Vilnius",
+      "venueType": "Venue type",
+      "venues": {
+        "hotel": "Hotel",
+        "cafe": "Café",
+        "restaurant": "Restaurant",
+        "other": "Other / Spa"
+      },
+      "email": "Email *",
+      "emailPlaceholder": "name@company.com",
+      "phone": "Phone *",
+      "notes": "Preferred format or other questions",
+      "notesPlaceholder": "e.g. We're looking for loose-leaf teas for the breakfast area and silk pyramids for the à la carte menu...",
+      "comingSoon": "Coming soon — request form in progress",
+      "comingSoonNote": "For now, please contact us by phone or email above."
+    }
+  }
+}

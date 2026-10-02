@@ -1,11 +1,15 @@
-import type { OccasionTag } from "../ShopClient";
+"use client";
 
-const OCCASIONS: { value: OccasionTag | "all"; icon: string; label: string; hint: string }[] = [
-  { value: "all", icon: "all_inclusive", label: "Visi Scenarijai", hint: "Visa profesionali kolekcija" },
-  { value: "breakfast", icon: "free_breakfast", label: "Pusryčių Bufetas", hint: "Sodrios ir tonizuojančios arbatos" },
-  { value: "afternoon", icon: "bakery_dining", label: "Afternoon Tea", hint: "Bergamotės ir gėlių skoniai" },
-  { value: "rooms", icon: "bed", label: "Room Service", hint: "Individualūs ir higieniški formatai" },
-  { value: "spa", icon: "spa", label: "SPA & Poilsis", hint: "Žolelių ir arbatos be kofeino" },
+import type { OccasionTag } from "../ShopClient";
+import { useI18n } from "@/app/components/I18nProvider";
+
+// Labels and hints live in the dictionaries under occasions.<value>
+const OCCASIONS: { value: OccasionTag | "all"; icon: string }[] = [
+  { value: "all", icon: "all_inclusive" },
+  { value: "breakfast", icon: "free_breakfast" },
+  { value: "afternoon", icon: "bakery_dining" },
+  { value: "rooms", icon: "bed" },
+  { value: "spa", icon: "spa" },
 ];
 
 export default function OccasionNavigator({
@@ -15,14 +19,15 @@ export default function OccasionNavigator({
   active: OccasionTag | "all";
   onChange: (value: OccasionTag | "all") => void;
 }) {
+  const { t } = useI18n();
   return (
     <section className="w-full bg-surface-container px-margin-mobile py-6 lg:px-margin-desktop">
       <div className="mx-auto max-w-[1440px] space-y-4">
         <div>
           <span className="font-sans text-[10.5px] uppercase tracking-widest text-antique-gold-muted">
-            Pasirinkite naudojimo scenarijų
+            {t.hotels.scenariosEyebrow}
           </span>
-          <h2 className="mt-1 font-serif text-[26px] leading-tight text-primary">Viešbučio ir Restorano Scenarijai</h2>
+          <h2 className="mt-1 font-serif text-[26px] leading-tight text-primary">{t.hotels.scenariosTitle}</h2>
         </div>
 
         {/* auto-rows-fr keeps every card the same height even if one hint wraps */}
@@ -50,12 +55,12 @@ export default function OccasionNavigator({
                   {occasion.icon}
                 </span>
                 <span className={`mt-3 block font-sans text-[16px] font-medium leading-snug ${isActive ? "" : "text-primary"}`}>
-                  {occasion.label}
+                  {t.occasions[occasion.value].label}
                 </span>
                 <span
                   className={`mt-0.5 block font-sans text-[11.5px] leading-snug ${isActive ? "text-parchment-deep/70" : "text-on-surface-variant"}`}
                 >
-                  {occasion.hint}
+                  {t.occasions[occasion.value].hint}
                 </span>
               </button>
             );

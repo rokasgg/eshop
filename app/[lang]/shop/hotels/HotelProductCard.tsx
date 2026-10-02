@@ -1,22 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { OrderStatus, useBoxOrder } from "../../components/OrderControls";
-import { boxesWord, formatEur } from "@/lib/cart";
+import { OrderStatus, useBoxOrder } from "@/app/components/OrderControls";
+import { formatEur } from "@/lib/cart";
+import { useI18n } from "@/app/components/I18nProvider";
 import { perCupPrice, toCartLine, type ShopProduct } from "../ShopClient";
-import { CATEGORY_LABELS } from "./FilterBar";
-
-const OCCASION_LABELS: Record<string, string> = {
-  breakfast: "Pusryčių Bufetas",
-  afternoon: "Afternoon Tea",
-  rooms: "Room Service",
-  spa: "SPA & Poilsis",
-};
-
-const TEA_TYPE_LABELS: Record<"loose" | "bags", string> = {
-  loose: "Biri arbata",
-  bags: "Arbatos pakeliai",
-};
 
 const MAX_FLAVOR_NOTES = 3;
 
@@ -31,13 +19,16 @@ export default function HotelProductCard({
 }) {
   const available = product.in_stock !== false;
   const line = toCartLine(product);
-  const order = useBoxOrder(line, { available, idleLabel: "Į užsakymą" });
+  const { t, plural, f } = useI18n();
+  const order = useBoxOrder(line, { available, idleLabel: t.order.toOrder });
   const cupPrice = perCupPrice(product);
 
-  const occasion = product.occasion_tags?.[0] ? OCCASION_LABELS[product.occasion_tags[0]] : null;
+  // The data also has tags without a scenario (e.g. "iced"); those get no badge
+  const firstTag = product.occasion_tags?.[0];
+  const occasion = firstTag && firstTag in t.occasions ? t.occasions[firstTag as keyof typeof t.occasions].label : null;
   const teaKind = [
-    product.tea_category ? CATEGORY_LABELS[product.tea_category] : null,
-    product.tea_type ? TEA_TYPE_LABELS[product.tea_type] : null,
+    product.tea_category ? t.teaCategories[product.tea_category] : null,
+    product.tea_type ? t.teaTypes[product.tea_type] : null,
   ]
     .filter(Boolean)
     .join(" · ");
@@ -74,7 +65,7 @@ export default function HotelProductCard({
         )}
         {!available && (
           <span className="absolute bottom-[7px] left-[7px] z-10 inline-flex h-[22px] items-center rounded-[999px] bg-surface/95 px-[9px] font-sans text-[8.5px] font-bold uppercase tracking-[0.09em] text-on-surface-variant">
-            Šiuo metu neturime
+            {t.common.outOfStock}
           </span>
         )}
       </div>
@@ -83,7 +74,7 @@ export default function HotelProductCard({
       <div className="flex flex-1 flex-col px-[12.5px] py-[11px]">
         <div className="flex items-center justify-between gap-[11px] font-sans">
           <span className="text-[7.5px] font-bold uppercase tracking-[0.14em] text-antique-gold-muted">
-            Ahmad Tea London
+            {t.common.brand}
           </span>
           {product.sku && (
             <span className="truncate text-[7.5px] font-semibold uppercase tracking-[0.1em] text-outline">
@@ -106,8 +97,8 @@ export default function HotelProductCard({
               <span
                 role="img"
                 className="flex shrink-0 items-center gap-[3.5px]"
-                title={`Stiprumas ${product.caffeine_level}/5`}
-                aria-label={`Stiprumas ${product.caffeine_level} iš 5`}
+                title={f(t.card.strengthTitle, { n: product.caffeine_level! })}
+                aria-label={f(t.card.strengthAria, { n: product.caffeine_level! })}
               >
                 {Array.from({ length: 5 }).map((_, i) => (
                   <CoffeeBean key={i} filled={i < product.caffeine_level!} />
@@ -126,9 +117,9 @@ export default function HotelProductCard({
 
         {/* Specs — one compact row */}
         <dl className="flex h-[30.5px] items-center gap-[9px] border-t border-outline-variant/60 pt-[5px] font-sans text-[10.5px]">
-          <Spec icon="package_2" label="Pakuotė" value={product.package_size ?? "—"} />
+          <Spec icon="package_2" label={t.card.packaging} value={product.package_size ?? "—"} />
           <span className="h-[12.5px] w-px shrink-0 bg-outline-variant/70" aria-hidden="true" />
-          <Spec icon="inventory_2" label="Dėžutėje" value={`${product.moq} vnt. dėžutėje`} />
+          <Spec icon="inventory_2" label={t.card.inBox} value={f(t.common.unitsInBox, { n: product.moq })} />
         </dl>
       </div>
 
@@ -139,12 +130,12 @@ export default function HotelProductCard({
             <strong className="font-serif text-[29px] font-semibold leading-none text-primary">
               {formatEur(line.pricePerBox)}
             </strong>
-            <span className="font-sans text-[11px] text-on-surface-variant">/ dėžutė</span>
+            <span className="font-sans text-[11px] text-on-surface-variant">{t.common.perBox}</span>
           </p>
           {cupPrice !== null && (
             <p className="flex items-baseline gap-[3.5px]">
               <strong className="font-serif text-[16px] text-antique-gold-muted">{formatEur(cupPrice)}</strong>
-              <span className="font-sans text-[10.5px] text-on-surface-variant">/ puodelis</span>
+              <span className="font-sans text-[10.5px] text-on-surface-variant">{t.common.perCup}</span>
             </p>
           )}
         </div>
@@ -155,7 +146,7 @@ export default function HotelProductCard({
             <OrderStatus order={order} compact />
           ) : (
             <p className="truncate font-sans text-[10px] tracking-[0.02em] text-on-surface-variant">
-              {product.moq} vnt. dėžutėje · Min. 1 dėžutė
+              {f(t.common.unitsInBox, { n: product.moq })} · {t.common.minOneBoxShort}
             </p>
           )}
         </div>
@@ -170,7 +161,7 @@ export default function HotelProductCard({
               type="button"
               onClick={() => order.setBoxes(order.boxes - 1)}
               disabled={!available || order.boxes <= 1}
-              aria-label="Sumažinti kiekį"
+              aria-label={t.order.decrease}
               className="text-[18px] text-on-surface transition-colors hover:bg-surface-container disabled:cursor-not-allowed disabled:opacity-30"
             >
               −
@@ -180,13 +171,13 @@ export default function HotelProductCard({
               className="flex min-w-0 items-center justify-center gap-[3.5px] whitespace-nowrap font-sans text-[11.5px] text-charcoal-ink"
             >
               <strong className="text-[14.5px]">{order.boxes}</strong>
-              {boxesWord(order.boxes)}
+              {plural(order.boxes, t.common.boxesWord)}
             </span>
             <button
               type="button"
               onClick={() => order.setBoxes(order.boxes + 1)}
               disabled={!available}
-              aria-label="Padidinti kiekį"
+              aria-label={t.order.increase}
               className="text-[18px] text-on-surface transition-colors hover:bg-surface-container disabled:cursor-not-allowed disabled:opacity-30"
             >
               +
@@ -210,8 +201,8 @@ export default function HotelProductCard({
             <span className="material-symbols-outlined text-[15px]!" aria-hidden="true">
               {order.icon}
             </span>
-            {/* Short confirmation: the full "Pridėta į užsakymą" doesn't fit a 4-column card */}
-            <span className="truncate">{order.confirmation === "added" ? "Pridėta" : order.label}</span>
+            {/* Short confirmation: the full "added to order" text doesn't fit a 4-column card */}
+            <span className="truncate">{order.confirmation === "added" ? t.order.addedShort : order.label}</span>
           </button>
         </div>
       </div>

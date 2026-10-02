@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { supabase } from "@/lib/supabase/client";
-import type { ShopProduct } from "../ShopClient";
+import { getProduct } from "@/lib/products";
+import { hasLocale } from "@/lib/i18n";
+import { getI18n } from "../../dictionaries";
 import AddToCart from "./AddToCart";
 
 export const dynamic = "force-dynamic";
@@ -10,24 +11,18 @@ export const dynamic = "force-dynamic";
 export default async function ProductPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ lang: string; id: string }>;
 }) {
-  const { id } = await params;
+  const { lang, id } = await params;
+  if (!hasLocale(lang)) notFound();
 
-  const { data: product } = await supabase
-    .from("products")
-    .select(
-      "id, name, image_url, package_size, price_wholesale, moq, sku, description, single_unit_fee, tea_type, tea_category, caffeine_level, flavor_tags, occasion_tags, units_per_package, package_weight_grams"
-    )
-    .eq("id", id)
-    .single<ShopProduct>();
-
+  const [{ t, href, f }, product] = await Promise.all([getI18n(lang), getProduct(id, lang)]);
   if (!product) notFound();
 
   return (
     <div className="mx-auto max-w-5xl px-margin-mobile py-space-xl lg:px-margin-desktop">
-      <Link href="/shop" className="font-sans text-body-sm text-on-surface-variant/60 transition hover:text-on-surface">
-        ← Atgal į katalogą
+      <Link href={href("/shop")} className="font-sans text-body-sm text-on-surface-variant/60 transition hover:text-on-surface">
+        {t.product.back}
       </Link>
 
       <div className="mt-space-md grid grid-cols-1 gap-gutter-lg md:grid-cols-2">
@@ -70,8 +65,8 @@ export default async function ProductPage({
               </div>
             )}
             <div>
-              <dt className="text-on-surface-variant/60">Minimalus užsakymas</dt>
-              <dd className="font-medium text-on-surface">{product.moq} vnt.</dd>
+              <dt className="text-on-surface-variant/60">{t.product.minOrder}</dt>
+              <dd className="font-medium text-on-surface">{f(t.product.minOrderValue, { n: product.moq })}</dd>
             </div>
           </dl>
 

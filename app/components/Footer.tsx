@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { client } from "@/sanity/lib/client";
+import { getI18n } from "@/app/[lang]/dictionaries";
+import type { Locale } from "@/lib/i18n";
 
 type SiteSettings = {
   logoText?: string | null;
@@ -10,10 +12,10 @@ type SiteSettings = {
 };
 
 const NAV_LINKS = [
-  { label: "Arbatos", href: "/shop" },
-  { label: "Apie mus", href: "/about" },
-  { label: "Kontaktai", href: "/contacts" },
-];
+  { key: "shop", href: "/shop" },
+  { key: "about", href: "/about" },
+  { key: "contacts", href: "/contacts" },
+] as const;
 
 async function getSettings(): Promise<SiteSettings | null> {
   try {
@@ -29,17 +31,15 @@ async function getSettings(): Promise<SiteSettings | null> {
   }
 }
 
-export default async function Footer() {
-  const settings = await getSettings();
+export default async function Footer({ lang }: { lang: Locale }) {
+  const [settings, { t, href, f }] = await Promise.all([getSettings(), getI18n(lang)]);
 
-  const logoText = settings?.logoText ?? "Ahmad Tea London";
-  const tagline =
-    settings?.footerTagline ??
-    "UAB Temus, oficialus Ahmad Tea atstovas Lietuvoje nuo 1995 m. Tiekiame aukščiausios kokybės britišką arbatą Lietuvos viešbučiams, restoranams ir kavinėms.";
-  const copyright =
-    settings?.copyright ??
-    `© 1995–${new Date().getFullYear()} UAB Temus. Oficialus Ahmad Tea London atstovas Lietuvoje. Visos teisės saugomos.`;
-  const navLinks = settings?.footerNavLinks ?? NAV_LINKS;
+  // Sanity footer texts are Lithuanian-only, so they only override the Lithuanian site
+  const cms = lang === "lt" ? settings : null;
+  const logoText = settings?.logoText ?? t.common.brand;
+  const tagline = cms?.footerTagline ?? t.footer.tagline;
+  const copyright = cms?.copyright ?? f(t.footer.copyright, { year: new Date().getFullYear() });
+  const navLinks = cms?.footerNavLinks ?? NAV_LINKS.map((l) => ({ label: t.nav.links[l.key], href: l.href }));
   const socialLinks = settings?.socialLinks ?? [];
 
   return (
@@ -48,7 +48,7 @@ export default async function Footer() {
         <div className="grid gap-gutter-lg sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <Link href="/" className="font-serif text-headline-md text-parchment-deep">
+            <Link href={href("/")} className="font-serif text-headline-md text-parchment-deep">
               {logoText}
             </Link>
             <p className="mt-space-md max-w-lg font-sans text-body-md text-parchment-deep/80">
@@ -75,13 +75,13 @@ export default async function Footer() {
           {/* Navigation */}
           <div>
             <h3 className="font-sans text-label-lg uppercase tracking-wider text-antique-gold-bright">
-              Navigacija
+              {t.footer.navigation}
             </h3>
             <ul className="mt-space-md space-y-space-sm">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <Link
-                    href={link.href}
+                    href={href(link.href)}
                     className="font-sans text-body-md text-parchment-deep/80 transition-colors hover:text-antique-gold-bright"
                   >
                     {link.label}
@@ -94,7 +94,7 @@ export default async function Footer() {
           {/* Contact / Info */}
           <div>
             <h3 className="font-sans text-label-lg uppercase tracking-wider text-antique-gold-bright">
-              Kontaktai
+              {t.footer.contacts}
             </h3>
             <ul className="mt-space-md space-y-space-sm font-sans text-body-md text-parchment-deep/80">
               <li>
@@ -107,7 +107,7 @@ export default async function Footer() {
                   +370 6 511 6331
                 </a>
               </li>
-              <li className="text-parchment-deep/60">Vilnius, Lietuva</li>
+              <li className="text-parchment-deep/60">{t.footer.city}</li>
             </ul>
           </div>
         </div>

@@ -4,7 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import { useCart } from "../context/CartContext";
 import BoxStepper from "./BoxStepper";
-import { boxesLabel, formatEur, lineTotal, minOrderShortfall, totalUnits } from "@/lib/cart";
+import { formatEur, lineTotal, minOrderShortfall, totalUnits } from "@/lib/cart";
+import { useI18n } from "./I18nProvider";
 
 type FormData = {
   name: string;
@@ -24,7 +25,13 @@ const BLANK: FormData = { name: "", email: "", phone: "", address: "", notes: ""
 export default function CartDrawer() {
   const { items, removeItem, setBoxQuantity, clearCart, subtotal, totalBoxes, isOpen, closeCart } =
     useCart();
-  const shortfall = minOrderShortfall(subtotal, totalBoxes);
+  const { t, plural, f } = useI18n();
+  const shortfallInfo = minOrderShortfall(subtotal, totalBoxes);
+  const shortfall = !shortfallInfo
+    ? null
+    : shortfallInfo.kind === "eur"
+      ? f(t.cart.minOrderEur, { amount: formatEur(shortfallInfo.amount) })
+      : f(t.cart.minOrderBoxes, { boxes: plural(shortfallInfo.boxes, t.common.boxes) });
 
   const [step, setStep] = useState<Step>("cart");
   const [form, setForm] = useState<FormData>(BLANK);
@@ -54,11 +61,11 @@ export default function CartDrawer() {
 
   const validate = () => {
     const errs: Partial<Record<keyof FormData, string>> = {};
-    if (!form.name.trim()) errs.name = "Privaloma";
-    if (!form.email.trim()) errs.email = "Privaloma";
-    else if (!/\S+@\S+\.\S+/.test(form.email)) errs.email = "Neteisingas el. paštas";
-    if (!form.phone.trim()) errs.phone = "Privaloma";
-    if (!form.address.trim()) errs.address = "Privaloma";
+    if (!form.name.trim()) errs.name = t.checkout.required;
+    if (!form.email.trim()) errs.email = t.checkout.required;
+    else if (!/\S+@\S+\.\S+/.test(form.email)) errs.email = t.checkout.invalidEmail;
+    if (!form.phone.trim()) errs.phone = t.checkout.required;
+    if (!form.address.trim()) errs.address = t.checkout.required;
     return errs;
   };
 
@@ -96,7 +103,7 @@ export default function CartDrawer() {
       clearCart();
       setStep("success");
     } catch {
-      setSubmitError("Įvyko klaida. Bandykite dar kartą.");
+      setSubmitError(t.checkout.error);
     } finally {
       setSubmitting(false);
     }
@@ -119,7 +126,7 @@ export default function CartDrawer() {
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Krepšelis"
+        aria-label={t.cart.title}
         className={`fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col bg-surface shadow-2xl transition-transform duration-300 ease-out ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
@@ -127,13 +134,14 @@ export default function CartDrawer() {
         {/* ── Header ── */}
         <div className="flex items-center justify-between border-b border-outline-variant/30 px-space-lg py-space-md">
           <h2 className="font-sans text-title-md font-bold text-on-surface">
-            {step === "cart" && `Krepšelis${hasItems ? ` (${boxesLabel(totalBoxes)})` : ""}`}
-            {step === "form" && "Pristatymo Duomenys"}
-            {step === "success" && "Užsakymas Patvirtintas"}
+            {step === "cart" &&
+              (hasItems ? f(t.cart.titleWithCount, { boxes: plural(totalBoxes, t.common.boxes) }) : t.cart.title)}
+            {step === "form" && t.cart.deliveryTitle}
+            {step === "success" && t.cart.confirmedTitle}
           </h2>
           <button
             onClick={handleClose}
-            aria-label="Uždaryti"
+            aria-label={t.cart.close}
             className="rounded-lg p-1.5 text-on-surface-variant/60 transition hover:bg-surface-container hover:text-on-surface"
           >
             <span className="material-symbols-outlined text-[18px]" aria-hidden="true">close</span>
@@ -148,7 +156,7 @@ export default function CartDrawer() {
             !hasItems ? (
               <div className="flex flex-col items-center justify-center gap-3 py-28 text-on-surface-variant/50">
                 <span className="material-symbols-outlined text-[40px]" aria-hidden="true">shopping_bag</span>
-                <p className="font-sans text-body-md">Jūsų krepšelis tuščias</p>
+                <p className="font-sans text-body-md">{t.cart.empty}</p>
               </div>
             ) : (
               <ul className="divide-y divide-outline-variant/20 px-space-lg">
@@ -169,10 +177,10 @@ export default function CartDrawer() {
                         </p>
                       </div>
                       <p className="font-sans text-body-sm text-on-surface-variant">
-                        {boxesLabel(item.boxQuantity)} × {formatEur(item.pricePerBox)}
+                        {plural(item.boxQuantity, t.common.boxes)} × {formatEur(item.pricePerBox)}
                       </p>
                       <p className="font-sans text-label-sm text-on-surface-variant/70">
-                        {item.unitsPerBox} vnt. dėžutėje · iš viso {totalUnits(item)} vnt.
+                        {f(t.cart.lineUnits, { perBox: item.unitsPerBox, total: totalUnits(item) })}
                       </p>
                       <div className="mt-space-xs flex items-center gap-space-md">
                         <BoxStepper
@@ -184,7 +192,7 @@ export default function CartDrawer() {
                           onClick={() => removeItem(item.id)}
                           className="font-sans text-label-sm text-on-surface-variant/60 transition hover:text-error"
                         >
-                          Pašalinti
+                          {t.cart.remove}
                         </button>
                       </div>
                     </div>
@@ -197,29 +205,29 @@ export default function CartDrawer() {
           {/* Form step */}
           {step === "form" && (
             <form id="checkout-form" onSubmit={handleSubmit} noValidate className="space-y-space-md px-space-lg py-space-lg">
-              <Field label="Vardas, Pavardė" required error={errors.name}>
-                <input type="text" value={form.name} onChange={field("name")} placeholder="Jonas Petraitis" className={INPUT} />
+              <Field label={t.checkout.name} required error={errors.name}>
+                <input type="text" value={form.name} onChange={field("name")} placeholder={t.checkout.namePlaceholder} className={INPUT} />
               </Field>
-              <Field label="El. paštas" required error={errors.email}>
-                <input type="email" value={form.email} onChange={field("email")} placeholder="jonas@imone.lt" className={INPUT} />
+              <Field label={t.checkout.email} required error={errors.email}>
+                <input type="email" value={form.email} onChange={field("email")} placeholder={t.checkout.emailPlaceholder} className={INPUT} />
               </Field>
-              <Field label="Telefonas" required error={errors.phone}>
-                <input type="tel" value={form.phone} onChange={field("phone")} placeholder="+370 600 00000" className={INPUT} />
+              <Field label={t.checkout.phone} required error={errors.phone}>
+                <input type="tel" value={form.phone} onChange={field("phone")} placeholder={t.checkout.phonePlaceholder} className={INPUT} />
               </Field>
-              <Field label="Pristatymo Adresas" required error={errors.address}>
+              <Field label={t.checkout.address} required error={errors.address}>
                 <textarea
                   value={form.address}
                   onChange={field("address")}
-                  placeholder="Gatvė, miestas, pašto kodas"
+                  placeholder={t.checkout.addressPlaceholder}
                   rows={3}
                   className={`${INPUT} resize-none`}
                 />
               </Field>
-              <Field label="Pastabos (nebūtina)">
+              <Field label={t.checkout.notes}>
                 <textarea
                   value={form.notes}
                   onChange={field("notes")}
-                  placeholder="Papildomi pageidavimai?"
+                  placeholder={t.checkout.notesPlaceholder}
                   rows={2}
                   className={`${INPUT} resize-none`}
                 />
@@ -227,14 +235,14 @@ export default function CartDrawer() {
 
               {/* Inline order summary */}
               <div className="rounded-xl bg-surface-container-low px-space-md py-space-md font-sans text-body-md">
-                <p className="mb-space-sm font-semibold text-on-surface">Užsakymo Santrauka</p>
+                <p className="mb-space-sm font-semibold text-on-surface">{t.checkout.summary}</p>
                 <ul className="space-y-1.5">
                   {items.map((i) => (
                     <li key={i.id} className="flex justify-between text-on-surface-variant">
                       <span>
                         {i.name}{" "}
                         <span className="text-on-surface-variant/60">
-                          × {boxesLabel(i.boxQuantity)} ({totalUnits(i)} vnt.)
+                          × {plural(i.boxQuantity, t.common.boxes)} {f(t.checkout.summaryUnits, { n: totalUnits(i) })}
                         </span>
                       </span>
                       <span className="shrink-0">{formatEur(lineTotal(i))}</span>
@@ -242,8 +250,8 @@ export default function CartDrawer() {
                   ))}
                 </ul>
                 <div className="mt-space-sm flex justify-between border-t border-outline-variant/30 pt-space-sm font-bold text-on-surface">
-                  <span>Viso</span>
-                  <span>€{subtotal.toFixed(2)}</span>
+                  <span>{t.checkout.total}</span>
+                  <span>{formatEur(subtotal)}</span>
                 </div>
               </div>
 
@@ -259,20 +267,20 @@ export default function CartDrawer() {
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-tertiary-fixed">
                 <span className="material-symbols-outlined text-[32px] text-on-tertiary-fixed" aria-hidden="true">check_circle</span>
               </div>
-              <h3 className="font-serif text-headline-sm text-on-surface">Užsakymas pateiktas!</h3>
+              <h3 className="font-serif text-headline-sm text-on-surface">{t.checkout.successTitle}</h3>
               <p className="max-w-xs font-sans text-body-md text-on-surface-variant">
-                Ačiū{form.name ? `, ${form.name.split(" ")[0]}` : ""}! Netrukus susisieksime dėl pristatymo patvirtinimo.
+                {f(t.checkout.successThanks, { name: form.name ? `, ${form.name.split(" ")[0]}` : "" })}
               </p>
               {orderId && (
                 <p className="rounded-full bg-surface-container px-4 py-1.5 font-mono text-label-sm text-on-surface-variant">
-                  Užsakymo ID: {orderId}
+                  {f(t.checkout.orderId, { id: orderId })}
                 </p>
               )}
               <button
                 onClick={handleClose}
                 className="mt-space-sm rounded-lg bg-primary-container px-6 py-2.5 font-sans text-label-lg font-semibold uppercase tracking-wider text-parchment-deep transition hover:bg-racing-green-dark"
               >
-                Tęsti Apsipirkimą
+                {t.checkout.continueShopping}
               </button>
             </div>
           )}
@@ -283,7 +291,7 @@ export default function CartDrawer() {
           <div className="space-y-space-sm border-t border-outline-variant/30 px-space-lg py-space-md">
             {step === "cart" && (
               <div className="flex items-center justify-between">
-                <span className="font-sans text-body-md text-on-surface-variant">Tarpinė suma</span>
+                <span className="font-sans text-body-md text-on-surface-variant">{t.cart.subtotal}</span>
                 <span className="font-serif text-headline-sm font-bold text-on-surface">
                   {formatEur(subtotal)}
                 </span>
@@ -299,7 +307,7 @@ export default function CartDrawer() {
                   onClick={() => setStep("cart")}
                   className="flex-1 rounded-lg border border-outline-variant py-3 font-sans text-body-md font-semibold text-on-surface transition hover:bg-surface-container"
                 >
-                  ← Atgal
+                  {t.cart.back}
                 </button>
               )}
               <button
@@ -309,11 +317,7 @@ export default function CartDrawer() {
                 disabled={step === "form" ? submitting : !!shortfall}
                 className="flex-1 rounded-lg bg-primary-container py-3 font-sans text-label-lg font-semibold uppercase tracking-wider text-parchment-deep transition hover:bg-racing-green-dark disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {step === "cart"
-                  ? "Tęsti Užsakymą →"
-                  : submitting
-                  ? "Pateikiama…"
-                  : "Pateikti Užsakymą"}
+                {step === "cart" ? t.cart.continue : submitting ? t.cart.submitting : t.cart.submit}
               </button>
             </div>
           </div>

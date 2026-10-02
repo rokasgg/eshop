@@ -7,8 +7,10 @@ import OccasionNavigator from "./OccasionNavigator";
 import FilterBar, { type HotelSortKey } from "./FilterBar";
 import HotelProductCard from "./HotelProductCard";
 import EquipmentShowcase from "./EquipmentShowcase";
+import { useI18n } from "@/app/components/I18nProvider";
 
 export default function HotelsCatalogClient({ products }: { products: ShopProduct[] }) {
+  const { t, plural } = useI18n();
   const [occasion, setOccasion] = useState<OccasionTag | "all">("all");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<HotelSortKey>("default");
@@ -84,12 +86,12 @@ export default function HotelsCatalogClient({ products }: { products: ShopProduc
       <section className="w-full bg-surface px-margin-mobile pb-space-xl pt-4 lg:px-margin-desktop">
         <div className="mx-auto max-w-[1440px]">
           <p className="mb-3 font-sans text-[13px] text-on-surface-variant">
-            {sorted.length} produkt{sorted.length !== 1 ? "ai" : "as"}
+            {plural(sorted.length, t.common.products)}
           </p>
 
           {sorted.length === 0 ? (
             <div className="flex flex-col items-center py-24 text-center text-on-surface-variant/60">
-              <p className="font-sans text-body-lg font-medium">Nė vienas produktas neatitinka filtrų.</p>
+              <p className="font-sans text-body-lg font-medium">{t.hotels.noResults}</p>
             </div>
           ) : (
             // Non-overlapping ranges: an arbitrary min-[1400px] would otherwise lose to sm: in the cascade
