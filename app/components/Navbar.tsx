@@ -8,7 +8,8 @@ import { useCart } from "../context/CartContext";
 const NAV_LINKS = [
   { label: "Arbatos", href: "/shop" },
   { label: "Viešbučiams", href: "/shop/hotels" },
-  { label: "Kavinėms ir Restoranams", href: "/shop" },
+  // Cafés & restaurants section hidden for now
+  // { label: "Kavinėms ir Restoranams", href: "/shop" },
   { label: "Apie mus", href: "/about" },
   { label: "Kontaktai", href: "/contacts" },
 ];

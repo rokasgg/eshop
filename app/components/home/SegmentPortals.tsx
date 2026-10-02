@@ -2,12 +2,14 @@ import Link from "next/link";
 
 // Cafés don't have a dedicated catalog route yet — points at the general
 // catalog until a café-specific Stitch export arrives.
-const CAFE_HREF = "/shop";
+// Café segment hidden for now; restore this and the card below together.
+// const CAFE_HREF = "/shop";
 
 export default function SegmentPortals() {
   return (
     <section className="w-full bg-surface px-margin-mobile py-space-xl lg:px-margin-desktop">
-      <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-gutter-lg lg:grid-cols-2">
+      {/* lg:grid-cols-2 while the café card below is visible */}
+      <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-gutter-lg">
         {/* Hotel segment */}
         <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl bg-primary-container p-space-xl text-parchment-deep shadow-xl">
           <div className="relative z-10 flex flex-col gap-space-md">
@@ -49,7 +51,7 @@ export default function SegmentPortals() {
           </div>
         </div>
 
-        {/* Cafe & Restaurant segment */}
+        {/* Cafe & Restaurant segment — hidden for now
         <div className="relative flex flex-col justify-between overflow-hidden rounded-2xl bg-parchment-deep p-space-xl text-charcoal-ink shadow-xl">
           <div className="relative z-10 flex flex-col gap-space-md">
             <div className="inline-flex w-fit items-center gap-2 rounded-full bg-surface-container px-3 py-1">
@@ -89,6 +91,7 @@ export default function SegmentPortals() {
             </Link>
           </div>
         </div>
+        */}
       </div>
     </section>
   );

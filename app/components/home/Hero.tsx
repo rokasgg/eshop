@@ -27,12 +27,14 @@ export default function Hero() {
               <span>Viešbučių kolekcija</span>
               <span className="material-symbols-outlined text-[18px] transition-transform group-hover:translate-x-1" aria-hidden="true">arrow_forward</span>
             </Link>
+            {/* Cafés & restaurants section hidden for now
             <Link
               href="/shop"
               className="rounded-lg bg-parchment-deep px-space-lg py-space-sm font-sans text-label-lg uppercase tracking-wider text-charcoal-ink shadow-sm transition-all hover:bg-surface-container"
             >
               Kavinių ir restoranų asortimentas
             </Link>
+            */}
           </div>
 
           <div className="flex flex-col gap-space-sm pt-space-md font-sans text-label-sm text-charcoal-muted sm:flex-row sm:items-center">
