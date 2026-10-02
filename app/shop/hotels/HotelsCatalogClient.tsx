@@ -92,9 +92,10 @@ export default function HotelsCatalogClient({ products }: { products: ShopProduc
               <p className="font-sans text-body-lg font-medium">Nė vienas produktas neatitinka filtrų.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-5 xl:grid-cols-3">
+            // Non-overlapping ranges: an arbitrary min-[1400px] would otherwise lose to sm: in the cascade
+            <div className="grid grid-cols-1 gap-4 sm:max-xl:grid-cols-2 xl:max-[1400px]:grid-cols-3 xl:max-[1400px]:gap-5 min-[1400px]:grid-cols-4">
               {sorted.map((product, index) => (
-                <HotelProductCard key={product.id} product={product} priority={index < 3} />
+                <HotelProductCard key={product.id} product={product} priority={index < 4} />
               ))}
             </div>
           )}

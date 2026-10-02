@@ -72,11 +72,11 @@ export function OrderStatus({ order, compact = false }: { order: ReturnType<type
   return (
     <p
       className={`flex min-w-0 items-center gap-space-xs font-sans text-on-tertiary-fixed-variant ${
-        compact ? "whitespace-nowrap text-[10.5px]" : "text-label-sm"
+        compact ? "whitespace-nowrap text-[9.5px]" : "text-label-sm"
       }`}
       role="status"
     >
-      <span className={`material-symbols-outlined shrink-0 ${compact ? "text-[13px]! leading-none!" : "text-[16px]"}`} aria-hidden="true">
+      <span className={`material-symbols-outlined shrink-0 ${compact ? "text-[11.5px]! leading-none!" : "text-[16px]"}`} aria-hidden="true">
         check_circle
       </span>
       <span className={compact ? "truncate" : undefined}>
