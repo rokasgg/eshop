@@ -1,10 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import OrderControls from "../components/OrderControls";
-import { formatEur, type CartLine } from "@/lib/cart";
+import { useSearchParams } from "next/navigation";
+import { type CartLine } from "@/lib/cart";
+import { getCategory, positionsLabel, type CatalogCategory } from "@/lib/categories";
+import CategoryPicker from "./CategoryPicker";
+import CategoryBar from "./CategoryBar";
+import HotelProductCard from "./hotels/HotelProductCard";
 
 export type TeaCategory = "black" | "green" | "herbal" | "fruit" | "white_oolong";
 export type OccasionTag = "breakfast" | "afternoon" | "rooms" | "spa";
@@ -69,10 +71,30 @@ export function perCupPrice(product: ShopProduct): number | null {
 
 type SortKey = "default" | "price-asc" | "price-desc" | "name";
 
+// /shop opens on the category picker; ?kategorija=… shows the filtered catalog.
 export default function ShopClient({ products }: { products: ShopProduct[] }) {
+  const searchParams = useSearchParams();
+  const category = getCategory(searchParams.get("kategorija"));
+  const initialSearch = searchParams.get("paieska") ?? "";
+
+  if (!category) return <CategoryPicker products={products} />;
+  // Keyed by the URL search so a new ?paieska=… re-seeds the search box
+  return <CatalogResults key={initialSearch} products={products} category={category} initialSearch={initialSearch} />;
+}
+
+function CatalogResults({
+  products: allProducts,
+  category,
+  initialSearch,
+}: {
+  products: ShopProduct[];
+  category: CatalogCategory;
+  initialSearch: string;
+}) {
+  const products = useMemo(() => allProducts.filter(category.match), [allProducts, category]);
   const [sort, setSort] = useState<SortKey>("default");
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState(initialSearch);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [selectedTypes, setSelectedTypes] = useState<("loose" | "bags")[]>([]);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -129,11 +151,11 @@ export default function ShopClient({ products }: { products: ShopProduct[] }) {
     const list = [...filtered];
     switch (sort) {
       case "price-asc":
-        return list.sort((a, b) => a.price_wholesale - b.price_wholesale);
+        return list.sort((a, b) => boxPrice(a) - boxPrice(b));
       case "price-desc":
-        return list.sort((a, b) => b.price_wholesale - a.price_wholesale);
+        return list.sort((a, b) => boxPrice(b) - boxPrice(a));
       case "name":
-        return list.sort((a, b) => a.name.localeCompare(b.name));
+        return list.sort((a, b) => a.name.localeCompare(b.name, "lt"));
       default:
         return list;
     }
@@ -242,7 +264,9 @@ export default function ShopClient({ products }: { products: ShopProduct[] }) {
   );
 
   return (
-    <div className="mx-auto max-w-[1440px] px-margin-mobile py-space-xl lg:px-margin-desktop">
+    <div className="mx-auto max-w-[1440px] px-margin-mobile pb-space-xl pt-5 lg:px-margin-desktop">
+      <CategoryBar products={allProducts} active={category} />
+
       {/* Mobile top bar */}
       <div className="mb-space-md flex items-center justify-between lg:hidden">
         <button
@@ -273,9 +297,9 @@ export default function ShopClient({ products }: { products: ShopProduct[] }) {
         </aside>
 
         <div className="min-w-0 flex-1">
-          <div className="mb-space-lg hidden items-center justify-between lg:flex">
-            <p className="font-sans text-body-md text-on-surface-variant">
-              {sorted.length} produkt{sorted.length !== 1 ? "ai" : "as"}
+          <div className="mb-4 hidden items-center justify-between lg:flex">
+            <p className="font-sans text-[13px] text-on-surface-variant">
+              <span className="font-semibold text-primary">{category.label}</span> · {positionsLabel(sorted.length)}
               {activeFiltersCount > 0 && (
                 <button
                   onClick={clearFilters}
@@ -287,8 +311,8 @@ export default function ShopClient({ products }: { products: ShopProduct[] }) {
             </p>
             <SortSelect sort={sort} onChange={setSort} />
           </div>
-          <p className="mb-space-md font-sans text-body-md text-on-surface-variant lg:hidden">
-            {sorted.length} produkt{sorted.length !== 1 ? "ai" : "as"}
+          <p className="mb-space-md font-sans text-[13px] text-on-surface-variant lg:hidden">
+            <span className="font-semibold text-primary">{category.label}</span> · {positionsLabel(sorted.length)}
           </p>
 
           {sorted.length === 0 ? (
@@ -304,74 +328,13 @@ export default function ShopClient({ products }: { products: ShopProduct[] }) {
               )}
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-space-md sm:grid-cols-3 xl:grid-cols-4">
+            // Sidebar leaves ~1000px at 1440, so 3 columns is the max that keeps cards usable
+            <div className="grid grid-cols-1 gap-4 sm:max-xl:grid-cols-2 xl:grid-cols-3 xl:gap-5">
               {sorted.map((product, index) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  priority={index < 4}
-                />
+                <HotelProductCard key={product.id} product={product} priority={index < 3} />
               ))}
             </div>
           )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export function ProductCard({
-  product,
-  priority,
-}: {
-  product: ShopProduct;
-  priority?: boolean;
-}) {
-
-  return (
-    <div className="group flex flex-col overflow-hidden rounded-xl border border-outline-variant/40 bg-surface transition hover:shadow-md">
-      {/* Image */}
-      <Link href={`/shop/${product.id}`} className="relative block aspect-square overflow-hidden bg-surface-container">
-        {product.image_url ? (
-          <Image
-            src={product.image_url}
-            alt={product.name}
-            fill
-            priority={priority}
-            sizes="(min-width: 1280px) 25vw, (min-width: 640px) 33vw, 50vw"
-            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-surface-container-high to-primary-container" />
-        )}
-        {product.package_size && (
-          <span className="absolute left-3 top-3 rounded bg-surface/90 px-2.5 py-1 font-sans text-label-sm font-semibold text-on-surface backdrop-blur-sm">
-            {product.package_size}
-          </span>
-        )}
-      </Link>
-
-      {/* Info */}
-      <div className="flex flex-1 flex-col p-space-md">
-        <Link href={`/shop/${product.id}`} className="font-sans font-semibold text-on-surface hover:underline">
-          {product.name}
-        </Link>
-        {product.sku && (
-          <p className="mt-1.5 font-sans text-label-sm text-on-surface-variant/70">SKU: {product.sku}</p>
-        )}
-
-        <div className="mt-auto space-y-space-sm pt-space-md">
-          <div>
-            <span className="font-sans text-title-md font-bold text-on-surface">
-              {formatEur(boxPrice(product))}
-            </span>
-            <span className="ml-1 font-sans text-label-sm text-on-surface-variant/60">/ dėžutė</span>
-            <p className="font-sans text-label-sm text-on-surface-variant/70">
-              1 dėžutė = {product.moq} vnt. · Minimumas: 1 dėžutė
-            </p>
-          </div>
-
-          <OrderControls line={toCartLine(product)} available={product.in_stock !== false} />
         </div>
       </div>
     </div>

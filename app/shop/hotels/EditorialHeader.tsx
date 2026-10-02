@@ -1,14 +1,7 @@
+import { positionsLabel } from "@/lib/categories";
+
 // productCount is catalog SKUs (one tea can come in several pack sizes),
 // so it's labelled as positions, not teas.
-// Lithuanian plural forms: 1 pozicija, 2–9 pozicijos, 10–20 pozicijų, 21 pozicija…
-function positionsLabel(n: number) {
-  const mod10 = n % 10;
-  const mod100 = n % 100;
-  if (mod10 === 1 && mod100 !== 11) return `${n} pozicija`;
-  if (mod10 >= 2 && (mod100 < 10 || mod100 >= 20)) return `${n} pozicijos`;
-  return `${n} pozicijų`;
-}
-
 function ProofPoint({ label, value, note }: { label: string; value: string; note: string }) {
   return (
     <div className="flex flex-col">

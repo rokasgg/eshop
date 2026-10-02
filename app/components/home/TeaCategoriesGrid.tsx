@@ -6,6 +6,7 @@ const CATEGORIES = [
     badgeClass: "bg-racing-green-dark",
     eyebrow: "Black Tea Collection",
     title: "Juodoji arbata",
+    href: "/shop?kategorija=juodoji",
     body: "Tradiciniai English Breakfast, Ceylon, Darjeeling ir Assam mišiniai. Turtingas, aromatingas kūnas ir gintarinė spalva.",
   },
   {
@@ -13,6 +14,7 @@ const CATEGORIES = [
     badgeClass: "bg-surface-tint",
     eyebrow: "Green Tea Selection",
     title: "Žalioji arbata",
+    href: "/shop?kategorija=zalioji",
     body: "Gryna žalioji arbata, Jasmine Romance, Green Tea Mint. Gaivus, švelniai gėliškas poskonis svečių poilsiui ir SPA ritualams.",
   },
   {
@@ -20,6 +22,7 @@ const CATEGORIES = [
     badgeClass: "bg-secondary",
     eyebrow: "Herbal & Fruit Infusions",
     title: "Žolelių ir vaisių arbatos",
+    href: "/shop?kategorija=be-kofeino",
     body: "Natūralios ramunėlių, pipirmėčių, miško uogų ir citrinžolės kompozicijos be kofeino vakaro poilsiui ir svečių savijautai.",
   },
   {
@@ -27,6 +30,7 @@ const CATEGORIES = [
     badgeClass: "bg-racing-green-dark",
     eyebrow: "Earl Grey & Heritage",
     title: "Earl Grey & Britų klasika",
+    href: "/shop?kategorija=visos&paieska=Earl%20Grey",
     body: "Legendinė Earl Grey su tikru bergamočių aliejumi, English Tea No. 1 ir išskirtinės Royal Tea serijos prestižiniams viešbučiams.",
   },
 ];
@@ -54,7 +58,7 @@ export default function TeaCategoriesGrid() {
           {CATEGORIES.map((category) => (
             <Link
               key={category.title}
-              href="/shop"
+              href={category.href}
               className="group flex flex-col overflow-hidden rounded-xl bg-surface shadow-sm transition-shadow hover:shadow-md"
             >
               <div className="relative h-48 w-full overflow-hidden bg-gradient-to-br from-surface-container-high to-primary-container">

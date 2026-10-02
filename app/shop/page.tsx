@@ -19,14 +19,14 @@ export default async function ShopPage() {
   return (
     <div className="min-h-screen bg-surface">
       {/* Page header */}
-      <div className="bg-racing-green-dark px-margin-mobile py-space-xl text-center text-parchment-deep lg:px-margin-desktop">
-        <p className="font-sans text-label-sm uppercase tracking-widest text-antique-gold-bright">
+      <div className="bg-racing-green-dark px-margin-mobile py-7 text-center text-parchment-deep lg:px-margin-desktop">
+        <p className="font-sans text-[10.5px] uppercase tracking-widest text-antique-gold-bright">
           HoReCa Didmeninė Prekyba
         </p>
-        <h1 className="mt-2 font-serif text-headline-lg-mobile tracking-tight lg:text-headline-lg">
+        <h1 className="mt-1.5 font-serif text-headline-lg-mobile leading-[1.1] tracking-tight lg:text-[40px]">
           Ahmad Tea Katalogas
         </h1>
-        <p className="mt-space-sm font-sans text-body-md text-parchment-deep/70">
+        <p className="mt-1.5 font-sans text-[14px] text-parchment-deep/70">
           Didmeninė arbata kavinėms, restoranams ir viešbučiams visoje Lietuvoje
         </p>
       </div>
