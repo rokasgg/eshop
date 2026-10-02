@@ -1,4 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
+import { categoryImage, getCategory } from "@/lib/categories";
 
 const CATEGORIES = [
   {
@@ -7,6 +9,7 @@ const CATEGORIES = [
     eyebrow: "Black Tea Collection",
     title: "Juodoji arbata",
     href: "/shop?kategorija=juodoji",
+    image: getCategory("juodoji")?.image,
     body: "Tradiciniai English Breakfast, Ceylon, Darjeeling ir Assam mišiniai. Turtingas, aromatingas kūnas ir gintarinė spalva.",
   },
   {
@@ -15,6 +18,7 @@ const CATEGORIES = [
     eyebrow: "Green Tea Selection",
     title: "Žalioji arbata",
     href: "/shop?kategorija=zalioji",
+    image: getCategory("zalioji")?.image,
     body: "Gryna žalioji arbata, Jasmine Romance, Green Tea Mint. Gaivus, švelniai gėliškas poskonis svečių poilsiui ir SPA ritualams.",
   },
   {
@@ -22,7 +26,8 @@ const CATEGORIES = [
     badgeClass: "bg-secondary",
     eyebrow: "Herbal & Fruit Infusions",
     title: "Žolelių ir vaisių arbatos",
-    href: "/shop?kategorija=be-kofeino",
+    href: "/shop?kategorija=zoleliu",
+    image: getCategory("zoleliu")?.image,
     body: "Natūralios ramunėlių, pipirmėčių, miško uogų ir citrinžolės kompozicijos be kofeino vakaro poilsiui ir svečių savijautai.",
   },
   {
@@ -31,6 +36,8 @@ const CATEGORIES = [
     eyebrow: "Earl Grey & Heritage",
     title: "Earl Grey & Britų klasika",
     href: "/shop?kategorija=visos&paieska=Earl%20Grey",
+    // Not a catalog category, so the photo is referenced directly
+    image: categoryImage("earl1.png"),
     body: "Legendinė Earl Grey su tikru bergamočių aliejumi, English Tea No. 1 ir išskirtinės Royal Tea serijos prestižiniams viešbučiams.",
   },
 ];
@@ -62,7 +69,16 @@ export default function TeaCategoriesGrid() {
               className="group flex flex-col overflow-hidden rounded-xl bg-surface shadow-sm transition-shadow hover:shadow-md"
             >
               <div className="relative h-48 w-full overflow-hidden bg-gradient-to-br from-surface-container-high to-primary-container">
-                <span className={`absolute left-3 top-3 rounded px-2 py-0.5 font-sans text-label-sm uppercase text-parchment-deep ${category.badgeClass}`}>
+                {category.image && (
+                  <Image
+                    src={category.image}
+                    alt=""
+                    fill
+                    sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03] motion-reduce:transform-none"
+                  />
+                )}
+                <span className={`absolute left-3 top-3 z-10 rounded px-2 py-0.5 font-sans text-label-sm uppercase text-parchment-deep ${category.badgeClass}`}>
                   {category.badge}
                 </span>
               </div>

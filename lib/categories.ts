@@ -13,7 +13,7 @@ export type CatalogCategory = {
 };
 
 // Category photos live next to the product photos in the "tea images" bucket
-const categoryImage = (file: string) =>
+export const categoryImage = (file: string) =>
   `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/tea%20images/${file}`;
 
 export const CATALOG_CATEGORIES: CatalogCategory[] = [
